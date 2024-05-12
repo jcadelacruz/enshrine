@@ -4,6 +4,7 @@
  */
 package enshrine;
 
+import controllers.MenuDisplayController;
 import java.io.IOException;
 import javafx.application.Application;
 import javafx.event.Event;
@@ -11,6 +12,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 /**
@@ -30,7 +32,30 @@ public class Enshrine extends Application {
         stage.show();
     }
     
-    /*public static FXMLLoader openFXML(String name, Event e, Class className) throws IOException{
+    public static void interpretLoadButton(Event e){
+        int index = 0;
+        try {
+            String text = ((Button)e.getSource()).getText();
+            String myChar = text.charAt(3)+"";
+            char charIndex = text.charAt(0);
+            index = Integer.parseInt(String.valueOf(charIndex));
+
+            if(!myChar.equals("L")){
+                //System.out.println("making: "+index);
+                new Game(index);
+                MenuDisplayController.refreshLoads();
+            }
+            else Enshrine.loadGame(index, e);//System.out.println("loading: "+index);
+            
+        }
+        catch (NumberFormatException exc) {
+            System.out.println("Cannot convert character to integer. Please make sure the character is a digit.");
+        }
+    }
+    public static void loadGame(int i, Event e){
+        
+    }
+    public static FXMLLoader openFXML(String name, Event e, Class className) throws IOException{
         FXMLLoader loader = null;
         try{
             //get current display
@@ -70,7 +95,7 @@ public class Enshrine extends Application {
             //error
         }
         return loader;
-    }*/
+    }
     public static void main(String[] args) {
         launch(args);
     }

@@ -4,8 +4,9 @@
  */
 package controllers;
 
-import enshrine.Enshrine;
+import enshrine.*;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -27,8 +28,14 @@ public class MenuDisplayController implements Initializable {
     @FXML private BorderPane bp;
     boolean creditsOpen = false;
     String creditsText;
+    private static ArrayList<MenuDisplayController> allMenuDisplayControllers = new ArrayList<>();
     
-    @FXML private void openLoads(ActionEvent event) {
+    public static void refreshLoads(){
+        for(MenuDisplayController m : allMenuDisplayControllers){
+            m.openLoads();
+        }
+    }
+    @FXML private void openLoads() {
         //make vbox
         VBox loadBoxes = new VBox();
         loadBoxes.setAlignment(Pos.CENTER);
@@ -36,7 +43,7 @@ public class MenuDisplayController implements Initializable {
         //make buttons
         for(int i = 1; i<=5; i++){
             String state = " [EMPTY]";
-            for(Game game : Enshrine.getGames()){
+            for(Game game : Game.getGames()){
                 if(game.getIndex()==i) state = " [LOADED]";
             }
             
@@ -44,19 +51,7 @@ public class MenuDisplayController implements Initializable {
             Button b = new Button();
             b.setText(str);
             b.setOnAction(e -> {
-                int index = 0;
-                try {
-                    String text = ((Button)e.getSource()).getText();
-                    String myChar = text.charAt(3)+"";
-                    char charIndex = text.charAt(0);
-                    index = Integer.parseInt(String.valueOf(charIndex));
-                    
-                    if(!myChar.equals("L")) Enshrine.makeGame(index);//System.out.println("making: "+index);
-                    else Enshrine.loadGame(index);//System.out.println("loading: "+index);
-                }
-                catch (NumberFormatException exc) {
-                    System.out.println("Cannot convert character to integer. Please make sure the character is a digit.");
-                }
+                Enshrine.interpretLoadButton(e);
             });
             
             loadBoxes.getChildren().add(b);
@@ -95,6 +90,9 @@ public class MenuDisplayController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        allMenuDisplayControllers.clear();
+        allMenuDisplayControllers.add(this);
+        
         initializeCreditsText();
     } 
     
