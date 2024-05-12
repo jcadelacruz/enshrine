@@ -53,7 +53,13 @@ public class Enshrine extends Application {
         }
     }
     public static void loadGame(int i, Event e){
-        
+        //try{
+        //    FXMLLoader loader = openFXML("")
+        //}
+    }
+    public static double[] s(double a, double b, double c, double d, double e, double f, double g){
+        double[] res = {a,b,c,d,e,f,g};
+        return res;
     }
     public static FXMLLoader openFXML(String name, Event e, Class className) throws IOException{
         FXMLLoader loader = null;
