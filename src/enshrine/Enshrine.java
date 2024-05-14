@@ -24,6 +24,11 @@ public class Enshrine extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
+        Building gatheringPlot = new Building(Building.USERINVENTORY, s(0.0,0.0,1.0));
+        Building fightingArea = new Building(Building.VOID, s(0.0,0.0,0.0));
+        Building trainStation = new Building(Building.DISCSTATEFF, s(0.0,0.0,0.0));
+        Building craftingTable = new Building(Building.USERINVENTORYEFF, s(Building.CRAFT,0.0,0.0));
+        
         //FXMLLoader loader = new FXMLLoader(getClass().getResource("/displays/MenuDisplay.fxml"));
         Parent root = FXMLLoader.load(getClass().getResource("/displays/MenuDisplay.fxml"));
         
@@ -68,6 +73,10 @@ public class Enshrine extends Application {
     }
     public static double[] s(double a, double b, double c, double d, double e, double f, double g){
         double[] res = {a,b,c,d,e,f,g};
+        return res;
+    }
+    public static double[] s(double a, double b, double c){
+        double[] res = {a,b,c};
         return res;
     }
     public static FXMLLoader openFXML(String name, Event e, Class className) throws IOException{

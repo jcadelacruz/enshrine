@@ -4,6 +4,8 @@
  */
 package controllers;
 
+import enshrine.Building;
+import enshrine.Entity;
 import enshrine.Game;
 import java.net.URL;
 import java.util.ArrayList;
@@ -25,10 +27,55 @@ public class MapDisplayController implements Initializable {
     @FXML private Button pauseBtn;
     @FXML private AnchorPane playAreaAnchorPane;
     private ArrayList<VBox> taskListCols;
+    
     private Game loadedGame;
+    private boolean paused = true;
+    
+    private static ArrayList<MapDisplayController> allMDCs = new ArrayList<>();
 
     public void setGame(enshrine.Game g){
         loadedGame = g;
+        Game.setUser(g);
+    }
+    public static void attemptUpdateAll() {
+        MapDisplayController mdc = allMDCs.get(0);
+        if(!mdc.paused){
+            mdc.update();
+        }
+    }
+    public void update(){
+        for(Entity e : loadedGame.getPopulation()){
+            //DISCIPLES
+            if(e.getType().equals(Entity.DISCIPLE)){
+                if(e.getTargetBuilding()!=null){//if in building
+                    Building b = e.getTargetBuilding();
+                    String type = b.getType();
+                    switch(type){
+                        case Building.USERSTATEFF:
+                            b.performBuildingFunction();
+                            break;
+                        case Building.DISCSTATEFF:
+                            b.performBuildingFunction(e, e.getTrainingFight());
+                            break;
+                        case Building.USERINVENTORYEFF:
+                            b.performBuildingFunction(e.getItemToCraft());
+                            break;
+                    }
+                }
+                else{//if not in building
+                    
+                }
+            }
+            //ALL ENTITIES
+            try{
+                if(e.getTargetBuilding()==null||e.getTargetBuilding().getType()==Building.VOID){
+                    
+                }
+            }
+            catch(Exception exc){
+                //vibes
+            }
+        }
     }
     private void initializeTaskList(){
         taskListCols = new ArrayList<>();
@@ -38,6 +85,7 @@ public class MapDisplayController implements Initializable {
         taskListCols.add(taskListCol4);
     }
     private void initializeAll(){
+        allMDCs.set(0, this);
         initializeTaskList();
     }
     /**

@@ -12,23 +12,24 @@ import java.util.ArrayList;
  */
 public class Game extends Entity{
 
-    public final int BRANCHCOUNT=3;
+    public final int BRANCHCOUNT=3, INITIAL_DISCIPLE_COUNT = 8;
     
     private int index;
-    private ArrayList<Building> buildings;
-    private ArrayList<ArrayList<Boolean>> obtainedUpgrades;
+    private ArrayList<Building> buildings = new ArrayList<>();
+    private ArrayList<ArrayList<Boolean>> obtainedUpgrades = new ArrayList<>();
+    private ArrayList<Entity> population = new ArrayList<>();
     private static ArrayList<Game> games = new ArrayList<>();
     private static Game user;
     
     public Game(int i){//blank new game
-        super(1.0, 1.0, 1.0, 1.0, 1.0, 1);
+        super(Entity.USER, 1.0, 1.0, 1.0, 1.0, 1.0, 1);
         index = i;
-        buildings = new ArrayList<>();
         
-        obtainedUpgrades = new ArrayList<>();
         for(int count = 0; count<BRANCHCOUNT; count++){
             obtainedUpgrades.add(new ArrayList<>());
         }
+        
+        for(int j = 0; j<INITIAL_DISCIPLE_COUNT; j++) population.add(new Entity(Entity.DISCIPLE, 1.0, 1.0, 1.0, 1.0, 1.0, 1));
         
         games.add(this);
     }
@@ -37,12 +38,14 @@ public class Game extends Entity{
     public int getIndex(){ return index;}
     public ArrayList<Building> getBuildings(){ return buildings;}
     public ArrayList<ArrayList<Boolean>> getObtainedUpgrades(){ return obtainedUpgrades;}
+    public ArrayList<Entity> getPopulation(){ return population;}
         //static
     public static ArrayList<Game> getGames(){ return games;}
     public static Game getUser(){ return user;}
     
     //setters
-    public static void setUser(int i){ user = games.get(i);}
+    public static void setUser(int i) throws IndexOutOfBoundsException{ user = getGameByIndex(i);}
+    public static void setUser(Game g){ user = g;}
     
     //methods
     public static Game getGameByIndex(int i) throws IndexOutOfBoundsException{
