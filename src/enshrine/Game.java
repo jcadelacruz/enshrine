@@ -45,4 +45,10 @@ public class Game extends Entity{
     public static void setUser(int i){ user = games.get(i);}
     
     //methods
+    public static Game getGameByIndex(int i) throws IndexOutOfBoundsException{
+        for(Game g : games){
+            if(g.index==i) return g;
+        }
+        throw new IndexOutOfBoundsException();
+    }
 }

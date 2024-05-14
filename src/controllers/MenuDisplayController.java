@@ -43,15 +43,17 @@ public class MenuDisplayController implements Initializable {
         //make buttons
         for(int i = 1; i<=5; i++){
             String state = " [EMPTY]";
-            for(Game game : Game.getGames()){
-                if(game.getIndex()==i) state = " [LOADED]";
+            try{
+                Game.getGameByIndex(i);
+                state = " [LOADED]";
             }
+            catch(IndexOutOfBoundsException exc){}
             
             String str = i+state;
             Button b = new Button();
             b.setText(str);
             b.setOnAction(e -> {
-                Enshrine.interpretLoadButton(e);
+                Enshrine.interpretLoadButton(e, this.getClass());
             });
             
             loadBoxes.getChildren().add(b);

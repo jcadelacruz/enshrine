@@ -4,6 +4,7 @@
  */
 package enshrine;
 
+import controllers.MapDisplayController;
 import controllers.MenuDisplayController;
 import java.io.IOException;
 import javafx.application.Application;
@@ -32,7 +33,7 @@ public class Enshrine extends Application {
         stage.show();
     }
     
-    public static void interpretLoadButton(Event e){
+    public static void interpretLoadButton(Event e, Class c){
         int index = 0;
         try {
             String text = ((Button)e.getSource()).getText();
@@ -45,17 +46,25 @@ public class Enshrine extends Application {
                 new Game(index);
                 MenuDisplayController.refreshLoads();
             }
-            else Enshrine.loadGame(index, e);//System.out.println("loading: "+index);
+            else Enshrine.loadGame(index, e, c);//System.out.println("loading: "+index);
             
         }
         catch (NumberFormatException exc) {
             System.out.println("Cannot convert character to integer. Please make sure the character is a digit.");
         }
     }
-    public static void loadGame(int i, Event e){
-        //try{
-        //    FXMLLoader loader = openFXML("")
-        //}
+    public static void loadGame(int i, Event e, Class c){
+        try{
+            FXMLLoader loader = openFXML("Map", e, c);
+            MapDisplayController mdc = loader.getController();
+            mdc.setGame(Game.getGameByIndex(i));
+        }
+        catch(IndexOutOfBoundsException exc){
+            System.out.println("game not found at index "+ i);
+        }
+        catch(IOException exc){
+            System.out.println("cannot load map display");
+        }
     }
     public static double[] s(double a, double b, double c, double d, double e, double f, double g){
         double[] res = {a,b,c,d,e,f,g};
