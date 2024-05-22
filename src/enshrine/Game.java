@@ -12,7 +12,7 @@ import java.util.ArrayList;
  */
 public class Game extends Entity{
 
-    public final int BRANCHCOUNT=3, INITIAL_DISCIPLE_COUNT = 8;
+    public static final int BRANCHCOUNT=3, INITIAL_DISCIPLE_COUNT = 8, GAME_SIZE = 3000, STEPDISTANCE=4;
     
     private int index;
     private ArrayList<Building> buildings = new ArrayList<>();

@@ -9,5 +9,8 @@ package enshrine;
  * @author dc_ca
  */
 public class Item {
-    
+    public int[] getRequirements(){
+        int[] res = {0,0,0};
+        return res;
+    }
 }

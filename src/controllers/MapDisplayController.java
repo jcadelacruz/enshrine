@@ -7,9 +7,11 @@ package controllers;
 import enshrine.Building;
 import enshrine.Entity;
 import enshrine.Game;
+import enshrine.MyTimerTask;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import java.util.Timer;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -30,8 +32,10 @@ public class MapDisplayController implements Initializable {
     
     private Game loadedGame;
     private boolean paused = true;
+    private int turn = 0;
     
     private static ArrayList<MapDisplayController> allMDCs = new ArrayList<>();
+    public static int TICKRATE = 12, TURN_RESET_AT = TICKRATE*2, MOVEMODIFIER = 2, ACTIONMODIFIER;
 
     public void setGame(enshrine.Game g){
         loadedGame = g;
@@ -40,27 +44,23 @@ public class MapDisplayController implements Initializable {
     public static void attemptUpdateAll() {
         MapDisplayController mdc = allMDCs.get(0);
         if(!mdc.paused){
+            mdc.updateTurn();
             mdc.update();
         }
+    }
+    public void updateTurn(){
+        turn++;
+        if(turn>=TURN_RESET_AT) turn = 0;
+    }
+    public void updateScreen(){
+        
     }
     public void update(){
         for(Entity e : loadedGame.getPopulation()){
             //DISCIPLES
             if(e.getType().equals(Entity.DISCIPLE)){
-                if(e.getTargetBuilding()!=null){//if in building
-                    Building b = e.getTargetBuilding();
-                    String type = b.getType();
-                    switch(type){
-                        case Building.USERSTATEFF:
-                            b.performBuildingFunction();
-                            break;
-                        case Building.DISCSTATEFF:
-                            b.performBuildingFunction(e, e.getTrainingFight());
-                            break;
-                        case Building.USERINVENTORYEFF:
-                            b.performBuildingFunction(e.getItemToCraft());
-                            break;
-                    }
+                if(e.getBuildingInsideOf()!=null){//if in building
+                    attemptEntityPerformAction(e, e.getBuildingInsideOf());
                 }
                 else{//if not in building
                     
@@ -68,14 +68,70 @@ public class MapDisplayController implements Initializable {
             }
             //ALL ENTITIES
             try{
-                if(e.getTargetBuilding()==null||e.getTargetBuilding().getType()==Building.VOID){
-                    
+                if(e.getBuildingInsideOf()==null||e.getBuildingInsideOf().getType()==Building.VOID){
+                    attemptEntityMove(e);
                 }
             }
             catch(Exception exc){
                 //vibes
             }
         }
+    }
+    private void attemptEntityMove(Entity e){
+        if((turn*e.getStats()[4])%(TICKRATE/MOVEMODIFIER) != 0) return;
+        
+        if(!isFreeSpace(e)) return;
+        
+        if(e.getGoingRight()) e.move(Game.STEPDISTANCE);
+        else e.move(-Game.STEPDISTANCE);
+    }
+    private boolean isFreeSpace(Entity e){ return isFreeSpace(e.getPos(),e.getWidth(),e.getGoingRight(), e.getType());}
+    private boolean isFreeSpace(int currPos, double width, boolean goingRight, String type){
+        boolean isFreeSpace = true;
+        
+        if(goingRight){
+            
+        }
+        
+        for(Entity e : loadedGame.getPopulation()){//can optimize this by sorting population array or creating multiple arrays of different entity type
+            if(e.getType().equals(type)) continue;
+            if(goingRight){
+                if((currPos<e.getPos()) != ((currPos+width+Game.STEPDISTANCE)<e.getPos())){
+                    return false;
+                }
+            }
+            else{
+                if((currPos<e.getPos()+e.getWidth()) != ((currPos+Game.STEPDISTANCE)<e.getPos()+e.getWidth())){
+                    return false;
+                }
+            }
+        }
+        
+        return isFreeSpace;
+    }
+    private void attemptEntityPerformAction(Entity e, Building b){
+        if((turn*e.getStats()[5])%(TICKRATE/ACTIONMODIFIER) != 0) return;
+        
+        String type = b.getType();
+        switch(type){
+            case Building.USERSTATEFF:
+                b.performBuildingFunction();
+                break;
+            case Building.DISCSTATEFF:
+                b.performBuildingFunction(e, e.getTrainingFight());
+                break;
+            case Building.USERINVENTORYEFF:
+                b.performBuildingFunction(e.getItemToCraft());
+                break;
+        }
+    }
+    public void buildBuilding(Building b){
+        b.build();
+        updateScreen();
+    }
+    public void initializeTimer(){
+        Timer timer = new Timer("delay", true);
+        timer.scheduleAtFixedRate(new MyTimerTask(), 100, 1000/TICKRATE);
     }
     private void initializeTaskList(){
         taskListCols = new ArrayList<>();
@@ -85,8 +141,10 @@ public class MapDisplayController implements Initializable {
         taskListCols.add(taskListCol4);
     }
     private void initializeAll(){
-        allMDCs.set(0, this);
+        allMDCs.clear();
+        allMDCs.add(this);
         initializeTaskList();
+        initializeTimer();
     }
     /**
      * Initializes the controller class.

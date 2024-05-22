@@ -19,12 +19,22 @@ public class Entity {
     protected ArrayList<Item> inventory = new ArrayList<>();
     protected int woodCnt, ironCnt, foodCnt, iq;
     //disciple/monster specific stuff
-    private Building targetBuilding = null;
+    private Building buildingInsideOf = null, buildingAttemptingToReach = null;
     private Item itemToCraft = null;
-    private boolean trainingFight = true, ;
+    private boolean trainingFight = true, goingRight = true;
+    private int materialToGather, targetPos = 5*Game.GAME_SIZE/6, pos;//pos is the BOTTOM LEFT corner of the hitbox
+    private double width = 10.0;
     
     public Entity(String t, double h, double s, double d, double ms, double as, int i){
         type = t;
+        switch(type){
+            case ENEMY:
+                goingRight = true;
+                break;
+            case DISCIPLE:
+                goingRight = false;
+                break;
+        }
         
         hp = h;
         maxHP = h;
@@ -45,13 +55,24 @@ public class Entity {
         return Enshrine.s(hp, maxHP, str, def, moveSpd, actionSpd, (double)iq);
     }
     public Item getItemToCraft(){ return itemToCraft;}
-    public Building getTargetBuilding(){ return targetBuilding;}
+    public Building getBuildingInsideOf(){ return buildingInsideOf;}
     public boolean getTrainingFight(){ return trainingFight;}
+    public int getTargetPos(){ return targetPos;}
+    public boolean getGoingRight(){ return goingRight;}
+    public double getWidth(){ return width;}
+    public int getPos(){ return pos;}
     
     //setters
     public void setItemToCraft(Item i){ itemToCraft = i;}
-    public void goInBuilding(Building b){ targetBuilding = b;}
+    public void goInBuilding(Building b){ buildingInsideOf = b;}
     public void setTrainingFight(boolean b){ trainingFight = b;}
+    public void setTargetPos(int i){ targetPos = i;}
+    public void setTargetPos(double i){
+        if(i>1) i = 1;
+        if(i<0) i = 0;
+        targetPos = (int) i*Game.GAME_SIZE;
+    }
+    public void setGoingRight(boolean b){ goingRight = b;}
     
     //methods
         //stats
@@ -79,14 +100,43 @@ public class Entity {
         if(sum<0) sum = 0;
         return sum;
     }
+        //position
+    public void move(int i){
+        pos+=i;
+    }
         //inventory
             //materials
-    public void attemptAddMaterials(double[] m) throws IllegalArgumentException{
-        attemptAddMaterials((int)m[0], WOOD); 
-        attemptAddMaterials((int)m[1], IRON); 
-        attemptAddMaterials((int)m[2], FOOD); 
+    public void attemptAddMaterials(int[] m) throws IllegalArgumentException{
+        int failAt = 0;
+        try{
+            for(int i = 0; i<3; i++){
+                attemptAddMaterials(-(int)m[i], i);
+                failAt++;
+            }
+        }
+        catch(IllegalArgumentException e){
+            for(int i = 0; i<=failAt; i++){
+                attemptAddMaterials(-(int)m[i], i);
+            }
+        }
     }
-    public void attemptAddMaterials(int count, int index) throws IllegalArgumentException{
+    public void attemptAddMaterials(int count, int i) throws IllegalArgumentException{
+        //convert
+        int index = 0;
+        switch(i){
+            case 0:
+                index = WOOD;
+                break;
+            case 1:
+                index = IRON;
+                break;
+            case 2:
+                index = FOOD;
+                break;
+            default:
+                //
+        }
+        //add
         if(!canAfford(count, index)) throw new IllegalArgumentException();
         switch(index){
             case Entity.WOOD:

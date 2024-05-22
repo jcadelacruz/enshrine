@@ -30,7 +30,7 @@ public class Enshrine extends Application {
         Building craftingTable = new Building(Building.USERINVENTORYEFF, s(Building.CRAFT,0.0,0.0));
         
         //FXMLLoader loader = new FXMLLoader(getClass().getResource("/displays/MenuDisplay.fxml"));
-        Parent root = FXMLLoader.load(getClass().getResource("/displays/MenuDisplay.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("/displays/MapDisplay.fxml"));
         
         Scene scene = new Scene(root);
         

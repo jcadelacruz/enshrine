@@ -51,7 +51,13 @@ public class Building {
         
         Game g = Game.getUser();
         if(effects[0]==Building.USERSTAT) g.addStat(effContent);
-        else if(effects[0]==Building.USERINVENTORY) g.attemptAddMaterials(effContent);
+        else if(effects[0]==Building.USERINVENTORY){
+            int[] intEffContent = new int[effContent.length];
+            for(int i=0; i<effContent.length; i++){
+                intEffContent[i] = (int) effContent[i];
+            }
+            g.attemptAddMaterials(intEffContent);
+        }
     }
     public void performBuildingFunction(Entity d){
         if(!type.equals(Building.DISCSTATEFF)) return;

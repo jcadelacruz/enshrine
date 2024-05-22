@@ -21,14 +21,14 @@
    <center>
       <ScrollPane hvalue="0.95" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" pannable="true" prefHeight="465.0" prefWidth="1200.0" BorderPane.alignment="CENTER">
          <content>
-            <AnchorPane fx:id="playAreaAnchorPane" maxHeight="-Infinity" minHeight="-Infinity" prefHeight="450.0" prefWidth="2925.0">
+            <AnchorPane fx:id="playAreaAnchorPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="450.0" prefWidth="3000.0">
                <children>
                   <ImageView fitHeight="450.0" fitWidth="4200.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../imgs/Map.png" />
                      </image>
                   </ImageView>
-                  <ImageView fitHeight="117.0" fitWidth="152.0" layoutX="395.0" layoutY="68.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="117.0" fitWidth="152.0" layoutX="2500.0" layoutY="68.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../imgs/not.png" />
                      </image>
