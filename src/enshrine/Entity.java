@@ -5,6 +5,7 @@
 package enshrine;
 
 import java.util.ArrayList;
+import javafx.scene.image.ImageView;
 
 /**
  *
@@ -24,6 +25,7 @@ public class Entity {
     private boolean trainingFight = true, goingRight = true;
     private int materialToGather, targetPos = 5*Game.GAME_SIZE/6, pos;//pos is the BOTTOM LEFT corner of the hitbox
     private double width = 10.0;
+    private ImageView displayCharacter = null;
     
     public Entity(String t, double h, double s, double d, double ms, double as, int i){
         type = t;
@@ -61,9 +63,13 @@ public class Entity {
     public boolean getGoingRight(){ return goingRight;}
     public double getWidth(){ return width;}
     public int getPos(){ return pos;}
+    public ImageView getDisplayCharacter(){ return displayCharacter;}
+    public Building getBuildingAttemptingToReach(){ return buildingAttemptingToReach;}
+    public String getImageFileName(){ return "/imgs/not.png";}
     
     //setters
     public void setItemToCraft(Item i){ itemToCraft = i;}
+    public void setBuildingInsideOf(Building b){ buildingInsideOf = b;}
     public void goInBuilding(Building b){ buildingInsideOf = b;}
     public void setTrainingFight(boolean b){ trainingFight = b;}
     public void setTargetPos(int i){ targetPos = i;}
@@ -73,6 +79,8 @@ public class Entity {
         targetPos = (int) i*Game.GAME_SIZE;
     }
     public void setGoingRight(boolean b){ goingRight = b;}
+    public void setDisplayCharacter(ImageView iv){ displayCharacter = iv;}
+    public void setBuildingAttemptingToReach(Building b){ buildingAttemptingToReach = b;}
     
     //methods
         //stats

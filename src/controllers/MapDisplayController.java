@@ -15,6 +15,8 @@ import java.util.Timer;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 
@@ -52,13 +54,36 @@ public class MapDisplayController implements Initializable {
         turn++;
         if(turn>=TURN_RESET_AT) turn = 0;
     }
-    public void updateScreen(){
-        
+    public void updatePlayArea(){
+        //population
+        for(Entity e : loadedGame.getPopulation()){
+            Image image;
+            try{
+                image = new Image(e.getImageFileName());
+            }
+            catch(Exception exc){
+                image = new Image("/imgs/not.png");
+            }
+            if(e.getDisplayCharacter()==null&&e.getBuildingInsideOf()==null){
+                //make image view
+                ImageView iv = new ImageView();
+                iv.setImage(image);
+                iv.setFitWidth(e.getWidth());
+                iv.setPreserveRatio(true);
+                iv.setSmooth(true);
+                iv.setCache(true);
+                //set in entity
+                e.setDisplayCharacter(iv);
+                //display in screen
+            }
+        }
     }
     public void update(){
         for(Entity e : loadedGame.getPopulation()){
             //DISCIPLES
             if(e.getType().equals(Entity.DISCIPLE)){
+                if(e.getBuildingInsideOf()!=e.getBuildingAttemptingToReach()) e.setBuildingInsideOf(null);
+                
                 if(e.getBuildingInsideOf()!=null){//if in building
                     attemptEntityPerformAction(e, e.getBuildingInsideOf());
                 }
@@ -89,9 +114,7 @@ public class MapDisplayController implements Initializable {
     private boolean isFreeSpace(int currPos, double width, boolean goingRight, String type){
         boolean isFreeSpace = true;
         
-        if(goingRight){
-            
-        }
+        if( (goingRight && currPos+width<=Game.GAME_SIZE) || (!goingRight && currPos-width<0)) return false;
         
         for(Entity e : loadedGame.getPopulation()){//can optimize this by sorting population array or creating multiple arrays of different entity type
             if(e.getType().equals(type)) continue;
@@ -127,7 +150,7 @@ public class MapDisplayController implements Initializable {
     }
     public void buildBuilding(Building b){
         b.build();
-        updateScreen();
+        updatePlayArea();
     }
     public void initializeTimer(){
         Timer timer = new Timer("delay", true);
