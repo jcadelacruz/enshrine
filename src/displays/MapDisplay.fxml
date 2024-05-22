@@ -28,34 +28,14 @@
                         <Image url="@../imgs/Map.png" />
                      </image>
                   </ImageView>
-                  <ImageView fitHeight="117.0" fitWidth="152.0" layoutX="2500.0" layoutY="68.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../imgs/not.png" />
-                     </image>
-                  </ImageView>
-                  <ImageView fitHeight="117.0" fitWidth="152.0" layoutX="435.0" layoutY="149.0" pickOnBounds="true" preserveRatio="true">
+                  <ImageView fitHeight="117.0" fitWidth="152.0" layoutX="2700.0" layoutY="200.0" pickOnBounds="true" preserveRatio="true">
                      <image>
                         <Image url="@../imgs/not.png" />
                      </image>
                      <effect>
-                        <ColorAdjust brightness="0.42" />
+                        <ColorAdjust contrast="-0.56" hue="-0.38" />
                      </effect>
                   </ImageView>
-                  <ImageView fitHeight="117.0" fitWidth="152.0" layoutX="512.0" layoutY="207.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../imgs/not.png" />
-                     </image>
-                  </ImageView>
-                  <VBox layoutX="2400.0" layoutY="78.0" prefHeight="329.0" prefWidth="348.0">
-                     <children>
-                        <ImageView fitHeight="214.0" fitWidth="282.0" pickOnBounds="true" preserveRatio="true">
-                           <image>
-                              <Image url="@../imgs/not.png" />
-                           </image>
-                        </ImageView>
-                        <Button mnemonicParsing="false" prefHeight="85.0" prefWidth="205.0" />
-                     </children>
-                  </VBox>
                </children>
             </AnchorPane>
          </content>
@@ -125,7 +105,7 @@
                   </ScrollPane>
                </children>
             </VBox>
-            <Button fx:id="pauseBtn" mnemonicParsing="false" prefHeight="85.0" prefWidth="85.0" text="PAUSE" />
+            <Button fx:id="pauseBtn" mnemonicParsing="false" onAction="#togglePause" prefHeight="85.0" prefWidth="85.0" text="PAUSE" />
          </children>
       </HBox>
    </top>

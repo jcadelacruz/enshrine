@@ -24,10 +24,10 @@ public class Entity {
     private Item itemToCraft = null;
     private boolean trainingFight = true, goingRight = true;
     private int materialToGather, targetPos = 5*Game.GAME_SIZE/6, pos;//pos is the BOTTOM LEFT corner of the hitbox
-    private double width = 10.0;
+    private double width = 60.0;
     private ImageView displayCharacter = null;
     
-    public Entity(String t, double h, double s, double d, double ms, double as, int i){
+    public Entity(String t, double h, double s, double d, double ms, double as, int i, int p){
         type = t;
         switch(type){
             case ENEMY:
@@ -45,6 +45,8 @@ public class Entity {
         moveSpd = ms;
         actionSpd = as;
         iq = i;
+        
+        pos = p;
         
         woodCnt = 0;
         ironCnt = 0;

@@ -5,6 +5,7 @@
 package enshrine;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  *
@@ -12,7 +13,7 @@ import java.util.ArrayList;
  */
 public class Game extends Entity{
 
-    public static final int BRANCHCOUNT=3, INITIAL_DISCIPLE_COUNT = 8, GAME_SIZE = 3000, STEPDISTANCE=4;
+    public static final int BRANCHCOUNT=3, INITIAL_DISCIPLE_COUNT = 3, GAME_SIZE = 3000, STEPDISTANCE=20, DEFAULT_Y_POS = 200;
     
     private int index;
     private ArrayList<Building> buildings = new ArrayList<>();
@@ -22,14 +23,28 @@ public class Game extends Entity{
     private static Game user;
     
     public Game(int i){//blank new game
-        super(Entity.USER, 1.0, 1.0, 1.0, 1.0, 1.0, 1);
+        super(Entity.USER, 1.0, 1.0, 1.0, 1.0, 1.0, 1, 0);
         index = i;
         
         for(int count = 0; count<BRANCHCOUNT; count++){
             obtainedUpgrades.add(new ArrayList<>());
         }
         
-        for(int j = 0; j<INITIAL_DISCIPLE_COUNT; j++) population.add(new Entity(Entity.DISCIPLE, 1.0, 1.0, 1.0, 1.0, 1.0, 1));
+        for(int j = 0; j<INITIAL_DISCIPLE_COUNT; j++){
+            ArrayList<Integer> taken = new ArrayList<>();
+            //taken.add(0);
+            boolean picked = false;
+            int randomNumber = 0, WIDTH = 75, wah = INITIAL_DISCIPLE_COUNT*WIDTH*3;
+            while(!picked){
+                picked = true;
+                randomNumber = new Random().nextInt(wah) - wah/2;
+                for(Integer l : taken){
+                    if(l-WIDTH<randomNumber && randomNumber<l+WIDTH) picked = false;
+                }
+            }
+            taken.add(randomNumber);
+            population.add(new Entity(Entity.DISCIPLE, 1.0, 1.0, 1.0, 1.0, 1.0, 1, (2950-(wah/2))+randomNumber));
+        }
         
         games.add(this);
     }

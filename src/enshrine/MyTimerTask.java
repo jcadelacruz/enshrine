@@ -6,15 +6,21 @@ package enshrine;
 
 import controllers.MapDisplayController;
 import java.util.TimerTask;
+import javafx.application.Platform;
 
 /**
  *
  * @author dc_ca
  */
 public class MyTimerTask extends TimerTask {
+    private static int fi=0;
 
     @Override
     public void run() {
-        MapDisplayController.attemptUpdateAll();
+        //System.out.println(fi);
+        //fi++;
+        Platform.runLater(() -> {
+            MapDisplayController.attemptUpdateAll();
+        });
     }
 }

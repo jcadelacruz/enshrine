@@ -12,6 +12,7 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.Timer;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -42,10 +43,12 @@ public class MapDisplayController implements Initializable {
     public void setGame(enshrine.Game g){
         loadedGame = g;
         Game.setUser(g);
+        updatePlayArea();
     }
     public static void attemptUpdateAll() {
         MapDisplayController mdc = allMDCs.get(0);
         if(!mdc.paused){
+            System.out.println(mdc.turn);
             mdc.updateTurn();
             mdc.update();
         }
@@ -53,6 +56,9 @@ public class MapDisplayController implements Initializable {
     public void updateTurn(){
         turn++;
         if(turn>=TURN_RESET_AT) turn = 0;
+    }
+    @FXML private void togglePause(ActionEvent e){
+        paused = !paused;
     }
     public void updatePlayArea(){
         //population
@@ -62,7 +68,7 @@ public class MapDisplayController implements Initializable {
                 image = new Image(e.getImageFileName());
             }
             catch(Exception exc){
-                image = new Image("/imgs/not.png");
+                image = new Image(getClass().getResourceAsStream("/imgs/not.png"));
             }
             if(e.getDisplayCharacter()==null&&e.getBuildingInsideOf()==null){
                 //make image view
@@ -72,9 +78,17 @@ public class MapDisplayController implements Initializable {
                 iv.setPreserveRatio(true);
                 iv.setSmooth(true);
                 iv.setCache(true);
+                iv.setLayoutX(e.getPos());
+                iv.setLayoutY(Game.DEFAULT_Y_POS);
                 //set in entity
                 e.setDisplayCharacter(iv);
                 //display in screen
+                playAreaAnchorPane.getChildren().add(iv);
+            }
+            if(e.getDisplayCharacter()!=null){
+                ImageView iv = e.getDisplayCharacter();
+                iv.setLayoutX(e.getPos());
+                //change image state here
             }
         }
     }
@@ -82,7 +96,7 @@ public class MapDisplayController implements Initializable {
         for(Entity e : loadedGame.getPopulation()){
             //DISCIPLES
             if(e.getType().equals(Entity.DISCIPLE)){
-                if(e.getBuildingInsideOf()!=e.getBuildingAttemptingToReach()) e.setBuildingInsideOf(null);
+                if(e.getBuildingInsideOf()!=e.getBuildingAttemptingToReach()) entityLeaveBuilding(e);
                 
                 if(e.getBuildingInsideOf()!=null){//if in building
                     attemptEntityPerformAction(e, e.getBuildingInsideOf());
@@ -93,13 +107,23 @@ public class MapDisplayController implements Initializable {
             }
             //ALL ENTITIES
             try{
-                if(e.getBuildingInsideOf()==null||e.getBuildingInsideOf().getType()==Building.VOID){
+                if(e.getBuildingInsideOf()==null||e.getBuildingInsideOf().getType().equals(Building.VOID)){
                     attemptEntityMove(e);
                 }
             }
             catch(Exception exc){
                 //vibes
             }
+        }
+        updatePlayArea();
+    }
+    private void entityLeaveBuilding(Entity e){
+        e.setBuildingInsideOf(null);
+        try{
+            playAreaAnchorPane.getChildren().remove(e.getDisplayCharacter());
+        }
+        catch(IndexOutOfBoundsException exc){
+            System.out.println("how even; error in MapDisplayController: entityLeaveBuilding(Entity e)");
         }
     }
     private void attemptEntityMove(Entity e){
@@ -175,6 +199,11 @@ public class MapDisplayController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         initializeAll();
+        /*playAreaAnchorPane.getChildren().clear();
+        Text t = new Text("waho");
+        playAreaAnchorPane.getChildren().add(t);
+        t.setLayoutX(2500);
+        t.setLayoutY(200);*/
     }    
     
 }
