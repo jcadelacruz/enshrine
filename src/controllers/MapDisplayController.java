@@ -204,6 +204,7 @@ public class MapDisplayController implements Initializable {
         playAreaAnchorPane.getChildren().add(t);
         t.setLayoutX(2500);
         t.setLayoutY(200);*/
+        
     }    
     
 }
