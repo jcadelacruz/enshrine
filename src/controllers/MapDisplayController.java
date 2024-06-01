@@ -27,7 +27,7 @@ import javafx.scene.layout.VBox;
  * @author dc_ca
  */
 public class MapDisplayController implements Initializable {
-//testing
+
     @FXML private VBox taskListCol1, taskListCol2, taskListCol3, taskListCol4;
     @FXML private Button pauseBtn;
     @FXML private AnchorPane playAreaAnchorPane;
