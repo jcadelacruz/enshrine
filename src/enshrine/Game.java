@@ -12,19 +12,26 @@ import java.util.Random;
  * 
  * @author dc_ca
  */
-public class Game extends Entity{
+public class Game{
 
     public static final int BRANCHCOUNT=3, INITIAL_DISCIPLE_COUNT = 3, GAME_SIZE = 3000, STEPDISTANCE=20, DEFAULT_Y_POS = 200;
     
+    //stats
+    private int hp, maxHP;
+    //saves
     private int index;
     private ArrayList<Building> buildings = new ArrayList<>();
     private ArrayList<ArrayList<Boolean>> obtainedUpgrades = new ArrayList<>();
     private ArrayList<Entity> population = new ArrayList<>();
+    //static
     private static ArrayList<Game> games = new ArrayList<>();
-    private static Game user;
+    private static Game currentGame;
     
     public Game(int i){//blank new game
-        super(Entity.USER, 1.0, 1.0, 1.0, 1.0, 1.0, 1, 0);
+        //stats
+        hp = 5;
+        maxHP = 5;
+        
         index = i;
         
         for(int count = 0; count<BRANCHCOUNT; count++){
@@ -45,24 +52,28 @@ public class Game extends Entity{
                 }
             }
             taken.add(randomNumber);
-            population.add(new Entity(Entity.DISCIPLE, 1.0, 1.0, 1.0, 1.0, 1.0, 1, (2950-(wah/2))+randomNumber));
+            population.add(new Entity(Entity.DISCIPLE, 1.0, 1.0, 1.0, 1, 1, 1, 1, (2950-(wah/2))+randomNumber));
         }
         
         games.add(this);
     }
     
     //getters
+        //stats
+    public int getHP(){ return hp;}
+    public int getMaxHP(){ return maxHP;}
+        //saves
     public int getIndex(){ return index;}
     public ArrayList<Building> getBuildings(){ return buildings;}
     public ArrayList<ArrayList<Boolean>> getObtainedUpgrades(){ return obtainedUpgrades;}
     public ArrayList<Entity> getPopulation(){ return population;}
         //static
     public static ArrayList<Game> getGames(){ return games;}
-    public static Game getUser(){ return user;}
+    public static Game getCurrentGame(){ return currentGame;}
     
     //setters
-    public static void setUser(int i) throws IndexOutOfBoundsException{ user = getGameByIndex(i);}
-    public static void setUser(Game g){ user = g;}
+    public static void setCurrentGame(int i) throws IndexOutOfBoundsException{ currentGame = getGameByIndex(i);}
+    public static void setCurrentGame(Game g){ currentGame = g;}
     
     //methods
     public static Game getGameByIndex(int i) throws IndexOutOfBoundsException{

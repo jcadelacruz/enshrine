@@ -21,9 +21,11 @@ public abstract class Building {
 
     private static ArrayList<Building> allBuildings = new ArrayList<>();
     
-    public Building(String t, double[] ef){
+    public Building(String t, double[] ef, int p, int w){
         type = t;
         effects = ef;
+        pos = p;
+        width = w;
         allBuildings.add(this);
     }
     /*public Building(double id, double[] ef){
@@ -38,6 +40,8 @@ public abstract class Building {
     }*/
     
     //getters
+    public int getPos(){ return pos;}
+    public int getWidth(){ return width;}
     public String getType(){ return type;}
     public boolean getBuilt(){ return built;}
     

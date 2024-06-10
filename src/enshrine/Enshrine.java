@@ -62,8 +62,10 @@ public class Enshrine extends Application {
         try{
             FXMLLoader loader = openFXML("Map", e, c);
             MapDisplayController mdc = loader.getController();
-            mdc.setGame(Game.getGameByIndex(i));
-            Entity.setCurrentGame(Game.getGameByIndex(i));
+            Game g = Game.getGameByIndex(i);
+            mdc.setGame(g);
+            Entity.setCurrentGame(g);
+            Game.setCurrentGame(g);
         }
         catch(IndexOutOfBoundsException exc){
             System.out.println("game not found at index "+ i);

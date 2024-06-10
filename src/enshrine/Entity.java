@@ -9,8 +9,6 @@ import exceptions.OutOfGameScreenBoundsException;
 import exceptions.OutOfResourceCapacityBoundsException;
 import exceptions.NotAffordableException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.scene.image.ImageView;
 
 /**
@@ -19,7 +17,7 @@ import javafx.scene.image.ImageView;
  * @author dc_ca
  */
 public class Entity {
-    public final static String ENEMY="HANNAH", DISCIPLE="LIKE_AND_SUBSCRIBE";//, USER="ITS_MAAM_ACTUALLY";
+    public final static String ENEMY="HANNAH", DISCIPLE="LIKE_AND_SUBSCRIBE", USER="ITS_MAAM_ACTUALLY";
     public final static int WOOD=0, IRON=1, FOOD=2;
     public final static int MAXSPEED = 4, LCM_OF_MAXSPEED = 12;
     
@@ -130,8 +128,7 @@ public class Entity {
             spd = MAXSPEED;
             System.out.println("speed greater than max speed: "+MAXSPEED);
         }
-        if(turn*spd % LCM_OF_MAXSPEED == 0) return true;
-        return false;
+        return turn*spd % LCM_OF_MAXSPEED == 0;
     }
     public void update(int turn){
         if(insideBuilding){
@@ -203,7 +200,7 @@ public class Entity {
         //position
     public void setTarget(Building b){
         buildingAttemptingToReach = b;
-        targetPos = (int) (b.getPos()+b.getWidth());
+        targetPos = b.getPos()+b.getWidth();
         //reset fields
         targetOpponent = null;
         insideBuilding = false;
@@ -243,7 +240,6 @@ public class Entity {
         else add+=width;
         
         //check all opponents
-        boolean collides = false;
         for(Entity e : currentGame.getPopulation()){
             if(e.getType().equals(type)) continue;
             if(e.collidesWith(pos+ (int)add)) return e;
@@ -252,8 +248,7 @@ public class Entity {
         return null;
     }
     public boolean collidesWith(int p){
-        if(pos<p && p<pos+width) return true;
-        return false;
+        return pos<p && p<pos+width;
     }
     //public void move(int i){ pos+=i;}
         //buildings
@@ -345,6 +340,6 @@ public class Entity {
     }
     
         //static
-    public void setCurrentGame(Game g){ currentGame = g;}
+    public static void setCurrentGame(Game g){ currentGame = g;}
     
 }
