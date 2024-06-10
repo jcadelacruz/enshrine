@@ -8,7 +8,8 @@ import java.util.ArrayList;
 import java.util.Random;
 
 /**
- *
+ * Game represents the game state, so all the game data should be accessible here
+ * 
  * @author dc_ca
  */
 public class Game extends Entity{
@@ -30,6 +31,7 @@ public class Game extends Entity{
             obtainedUpgrades.add(new ArrayList<>());
         }
         
+        //spawn disciples at random locs
         for(int j = 0; j<INITIAL_DISCIPLE_COUNT; j++){
             ArrayList<Integer> taken = new ArrayList<>();
             //taken.add(0);
