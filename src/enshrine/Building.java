@@ -17,6 +17,7 @@ public abstract class Building {
     private String type;
     private double[] effects = new double[8];//im not sure if 8 is the max possible amt
     private boolean built = false;
+    private int pos, width;//see Entity class for details
 
     private static ArrayList<Building> allBuildings = new ArrayList<>();
     
@@ -44,5 +45,9 @@ public abstract class Building {
     public void build(){ built = true;}
     
     //methods
-    public abstract void performBuildingFunction();
+    public abstract void performBuildingFunction(Entity e);
+    public boolean collidesWith(int p){
+        if(pos<p && p<pos+width) return true;
+        return false;
+    }
 }

@@ -9,6 +9,8 @@ import exceptions.OutOfGameScreenBoundsException;
 import exceptions.OutOfResourceCapacityBoundsException;
 import exceptions.NotAffordableException;
 import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.scene.image.ImageView;
 
 /**
@@ -19,29 +21,36 @@ import javafx.scene.image.ImageView;
 public class Entity {
     public final static String ENEMY="HANNAH", DISCIPLE="LIKE_AND_SUBSCRIBE";//, USER="ITS_MAAM_ACTUALLY";
     public final static int WOOD=0, IRON=1, FOOD=2;
+    public final static int MAXSPEED = 4, LCM_OF_MAXSPEED = 12;
     
     //type
     protected String type;//Type distinguishes allies from foes; allies can't damage each other
     //general stats
-    protected double hp, maxHP, str, def, atkSpd;//They can attack, hence hp-maxHP str def atkSpd
+        //atk
+    protected double hp, maxHP, str, def;//They can attack, hence hp-maxHP str def atkSpd
+    protected int atkSpd;
+    private Entity targetOpponent = null;
         //movement
-    protected double moveSpd;//They can move, hence pos and moveSpd
+    protected int moveSpd;//They can move, hence pos and moveSpd
     private int pos, targetPos = Game.GAME_SIZE*5/6;//pos describes the BOTTOM LEFT corner of the hit box of the entity; pos=0 means left side of the screen
     private int width = 60;//CURRENTLY SET TO DEFAULT; width of the hit box
     private Building buildingAttemptingToReach = null;
     private boolean insideBuilding = false, goingRight = true;
     private ImageView displayCharacter = null;
         //
-    protected double actionSpd;//They can do building actions, hence actionSpd
+    protected int actionSpd;//They can do building actions, hence actionSpd
         protected int iq;//They can craft, hence iq
     //inventory
         //inv-items
     protected ArrayList<Item> inventory = new ArrayList<>();//Inventory contains all items possessed by the entity
     private Item itemAttemptingToCraft = null, equippedArmor = null, equippedWeapon = null;//stats are added upon equip and de-equip
         //resources
-    protected int woodCnt, ironCnt, foodCnt, capacity;
+    protected int woodCnt, ironCnt, foodCnt, capacity = 10;//STANDARD
     
-    public Entity(String t, double h, double s, double d, double ms, double as, int i, int p){
+    //static
+    private static Game currentGame;
+    
+    public Entity(String t, double h, double s, double d, int ms, int ats, int as, int i, int p){
         type = t;
         switch(type){
             case ENEMY:
@@ -57,6 +66,7 @@ public class Entity {
         str = s;
         def = d;
         moveSpd = ms;
+        atkSpd = ats;
         actionSpd = as;
         iq = i;
         
@@ -71,9 +81,11 @@ public class Entity {
     public String getType(){ return type;}
         //stats
     public double[] getStats(){
-        double[] res = {hp, maxHP, str, def, moveSpd, atkSpd, actionSpd, (double)iq};
+        double[] res = {hp, maxHP, str, def, (double)moveSpd, (double)atkSpd, (double)actionSpd, (double)iq};
         return res;
     }
+            //atk
+    public Entity getTargetOpponent(){ return targetOpponent;}
             //position
     public int getPos(){ return pos;}
     public boolean getInsideBuilding(){ return insideBuilding;}
@@ -112,15 +124,49 @@ public class Entity {
     public void setItemAttemptingToCraft(Item i){ itemAttemptingToCraft = i;}
     
     //methods
+    public boolean canThisBePerformed(int turn, int speed){
+        int spd = speed;
+        if(speed>MAXSPEED){
+            spd = MAXSPEED;
+            System.out.println("speed greater than max speed: "+MAXSPEED);
+        }
+        if(turn*spd % LCM_OF_MAXSPEED == 0) return true;
+        return false;
+    }
+    public void update(int turn){
+        if(insideBuilding){
+            if(canThisBePerformed(turn, actionSpd)){
+                performUseOfBuilding(buildingAttemptingToReach);
+            }
+        }
+        else{
+            if(targetOpponent!=null){
+                if(canThisBePerformed(turn,atkSpd)){damage(targetOpponent);}}
+            else{
+                if(findOpponentOnPath()==null){
+                    if(canThisBePerformed(turn, moveSpd)){
+                        try{ move();}
+                        catch (OutOfGameScreenBoundsException ex) {System.out.println("Error in Entity class; update()");}
+                        if(buildingAttemptingToReach.collidesWith(this.pos)){
+                            insideBuilding = true;
+                        }
+                    }
+                }
+                else{
+                    targetOpponent = findOpponentOnPath();
+                }
+            }
+        }
+    }
         //stats
     public void addStat(double[] d){
         this.addMaxHP(d[1]);
         this.addHP(d[0]);
         str = addUntilZero(str, d[2]);
         def = addUntilZero(def, d[3]);
-        moveSpd = addUntilZero(moveSpd, d[4]);
-        atkSpd = addUntilZero(atkSpd, d[5]);
-        actionSpd = addUntilZero(actionSpd, d[6]);
+        moveSpd = addToSpeed(moveSpd, (int) d[4]);
+        atkSpd = addToSpeed(atkSpd, (int) d[5]);
+        actionSpd = addToSpeed(actionSpd, (int) d[6]);
         iq = (int) addUntilZero((double) iq, d[7]);
     }
     public void addHP(double h){
@@ -141,22 +187,79 @@ public class Entity {
         }
         return sum;
     }
+    public int addToSpeed(int currVal, int add){
+        int sum = currVal + add;
+        if(sum<0){
+            //throw new BelowZeroException();
+            sum = 0;
+        }
+        if(sum>MAXSPEED) return MAXSPEED;
+        return sum;
+    }
+        //atk
+    public void damage(Entity e){
+        
+    }
         //position
     public void setTarget(Building b){
         buildingAttemptingToReach = b;
         targetPos = (int) (b.getPos()+b.getWidth());
+        //reset fields
+        targetOpponent = null;
+        insideBuilding = false;
     }
     public void move() throws OutOfGameScreenBoundsException{
+        //determine direction
+        goingRight = (targetPos>pos);
+        //move
         if(goingRight){
             if(pos+moveSpd>Game.GAME_SIZE) throw new OutOfGameScreenBoundsException();
-            pos+=moveSpd;
+            pos+= (int)moveSpd;
         }
         else{
             if(pos-moveSpd<0) throw new OutOfGameScreenBoundsException();
-            pos-=moveSpd;
+            pos-= (int)moveSpd;
         }
     }
+    /*public boolean findOpponentOnPath(){
+        //determine direction
+        double add = moveSpd;
+        if(!goingRight){ add = -add;}
+        else add+=width;
+        
+        //check all opponents
+        boolean collides = false;
+        for(Entity e : currentGame.getPopulation()){
+            if(e.getType().equals(type)) continue;
+            if(e.collidesWith(pos+ (int)add)) collides = true;
+        }
+        
+        return collides;
+    }*/
+    public Entity findOpponentOnPath(){
+        //determine direction
+        double add = moveSpd;
+        if(!goingRight){ add = -add;}
+        else add+=width;
+        
+        //check all opponents
+        boolean collides = false;
+        for(Entity e : currentGame.getPopulation()){
+            if(e.getType().equals(type)) continue;
+            if(e.collidesWith(pos+ (int)add)) return e;
+        }
+        
+        return null;
+    }
+    public boolean collidesWith(int p){
+        if(pos<p && p<pos+width) return true;
+        return false;
+    }
     //public void move(int i){ pos+=i;}
+        //buildings
+    public void performUseOfBuilding(Building b){
+        b.performBuildingFunction(this);
+    }
         //resources
     public void attemptAddMaterials(int[] m) throws NotAffordableException, OutOfResourceCapacityBoundsException{
         int failAt = 0;
@@ -240,5 +343,8 @@ public class Entity {
         if (inventory.contains(item)) inventory.remove(item);
         else throw new ItemNotInInventoryException();
     }
+    
+        //static
+    public void setCurrentGame(Game g){ currentGame = g;}
     
 }
