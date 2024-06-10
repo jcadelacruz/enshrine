@@ -19,7 +19,7 @@ public abstract class Building {
     private boolean built = false;
     private int pos, width;//see Entity class for details
 
-    private static ArrayList<Building> allBuildings = new ArrayList<>();
+    public static ArrayList<Building> allBuildings = new ArrayList<>();
     
     public Building(String t, double[] ef, int p, int w){
         type = t;
@@ -44,6 +44,8 @@ public abstract class Building {
     public int getWidth(){ return width;}
     public String getType(){ return type;}
     public boolean getBuilt(){ return built;}
+        //static
+    public static ArrayList<Building> getAllBuildings(){ return allBuildings;}
     
     //setters
     public void build(){ built = true;}

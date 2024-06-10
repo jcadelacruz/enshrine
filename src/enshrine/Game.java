@@ -52,7 +52,9 @@ public class Game{
                 }
             }
             taken.add(randomNumber);
-            population.add(new Entity(Entity.DISCIPLE, 1.0, 1.0, 1.0, 1, 1, 1, 1, (2950-(wah/2))+randomNumber));
+            Entity d = new Entity(Entity.DISCIPLE, 1.0, 1.0, 1.0, 1, 1, 1, 1, (2950-(wah/2))+randomNumber);
+            d.setTarget(Building.getAllBuildings().get(0));
+            population.add(d);
         }
         
         games.add(this);
@@ -76,6 +78,16 @@ public class Game{
     public static void setCurrentGame(Game g){ currentGame = g;}
     
     //methods
+    public void addHP(int h){
+        int health = hp + h;
+        if(health>maxHP) health = maxHP;
+        if(health<0) health = 0;
+        hp = health;
+    }
+    public void addMaxHP(int h){
+        maxHP += h;
+        addHP(0);
+    }
     public static Game getGameByIndex(int i) throws IndexOutOfBoundsException{
         for(Game g : games){
             if(g.index==i) return g;

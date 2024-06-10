@@ -20,6 +20,7 @@ public class Entity {
     public final static String ENEMY="HANNAH", DISCIPLE="LIKE_AND_SUBSCRIBE", USER="ITS_MAAM_ACTUALLY";
     public final static int WOOD=0, IRON=1, FOOD=2;
     public final static int MAXSPEED = 4, LCM_OF_MAXSPEED = 12;
+    public final static int STEPSIZE = 15;
     
     //type
     protected String type;//Type distinguishes allies from foes; allies can't damage each other
@@ -144,7 +145,8 @@ public class Entity {
                     if(canThisBePerformed(turn, moveSpd)){
                         try{ move();}
                         catch (OutOfGameScreenBoundsException ex) {System.out.println("Error in Entity class; update()");}
-                        if(buildingAttemptingToReach.collidesWith(this.pos)){
+                        
+                        if(buildingAttemptingToReach.collidesWith(pos)){
                             insideBuilding = true;
                         }
                     }
@@ -210,12 +212,12 @@ public class Entity {
         goingRight = (targetPos>pos);
         //move
         if(goingRight){
-            if(pos+moveSpd>Game.GAME_SIZE) throw new OutOfGameScreenBoundsException();
-            pos+= (int)moveSpd;
+            if(pos+STEPSIZE>Game.GAME_SIZE) throw new OutOfGameScreenBoundsException();
+            pos+= STEPSIZE;
         }
         else{
             if(pos-moveSpd<0) throw new OutOfGameScreenBoundsException();
-            pos-= (int)moveSpd;
+            pos-= STEPSIZE;
         }
     }
     /*public boolean findOpponentOnPath(){
@@ -235,7 +237,7 @@ public class Entity {
     }*/
     public Entity findOpponentOnPath(){
         //determine direction
-        double add = moveSpd;
+        double add = STEPSIZE;
         if(!goingRight){ add = -add;}
         else add+=width;
         

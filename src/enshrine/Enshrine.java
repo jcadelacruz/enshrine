@@ -24,11 +24,11 @@ public class Enshrine extends Application {
     
     @Override
     public void start(Stage stage) throws Exception {
-        Building gatheringPlot = new Building(Building.USERINVENTORY, s(0.0,0.0,1.0));
-        Building fightingArea = new Building(Building.VOID, s(0.0,0.0,0.0));
+        Building fightingArea = new DestinationBuilding(500, 25);
+        /*Building gatheringPlot = new Building(Building.USERINVENTORY, s(0.0,0.0,1.0));
         Building trainStation = new Building(Building.DISCSTATEFF, s(0.0,0.0,0.0));
         Building craftingTable = new Building(Building.USERINVENTORYEFF, s(Building.CRAFT,0.0,0.0));
-        
+        */
         //FXMLLoader loader = new FXMLLoader(getClass().getResource("/displays/MenuDisplay.fxml"));
         Parent root = FXMLLoader.load(getClass().getResource("/displays/MenuDisplay.fxml"));
         
