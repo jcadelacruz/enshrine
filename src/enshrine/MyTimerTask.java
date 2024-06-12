@@ -4,7 +4,7 @@
  */
 package enshrine;
 
-import controllers.MapDisplayController;
+import controllers.GameDisplayController;
 import java.util.TimerTask;
 import javafx.application.Platform;
 
@@ -20,7 +20,7 @@ public class MyTimerTask extends TimerTask {
         //System.out.println(fi);
         //fi++;
         Platform.runLater(() -> {
-            MapDisplayController.attemptUpdateAll();
+            GameDisplayController.attemptUpdateAll();
         });
     }
 }

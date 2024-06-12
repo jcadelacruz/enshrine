@@ -39,23 +39,30 @@ public class Game{
         }
         
         //spawn disciples at random locs
+        ArrayList<Integer> taken = new ArrayList<>();
         for(int j = 0; j<INITIAL_DISCIPLE_COUNT; j++){
-            ArrayList<Integer> taken = new ArrayList<>();
-            //taken.add(0);
             boolean picked = false;
             int randomNumber = 0, WIDTH = 75, wah = INITIAL_DISCIPLE_COUNT*WIDTH*3;
             while(!picked){
                 picked = true;
-                randomNumber = new Random().nextInt(wah) - wah/2;
-                for(Integer l : taken){
-                    if(l-WIDTH<randomNumber && randomNumber<l+WIDTH) picked = false;
+                randomNumber = new Random().nextInt(wah);
+                //System.out.println("attempting rand num: "+randomNumber);
+                for(int l : taken){
+                    System.out.println(" checking: "+randomNumber+" with: "+l);
+                    if(l<randomNumber && randomNumber<l+WIDTH) picked = false;
+                    if(randomNumber<l && l<randomNumber+WIDTH) picked = false;
                 }
             }
             taken.add(randomNumber);
-            Entity d = new Entity(Entity.DISCIPLE, 1.0, 1.0, 1.0, 1, 1, 1, 1, (2950-(wah/2))+randomNumber);
-            d.setTarget(Building.getAllBuildings().get(0));
+            //System.out.println("rand num: "+randomNumber);
+            Entity d = new Entity(Entity.DISCIPLE, 1.0, 1.0, 1.0, 1, 1, 1, 1, (Game.GAME_SIZE-(wah+150))+randomNumber);
+            d.setTarget(Building.getByIndex(0));
             population.add(d);
         }
+        //TEST spawn opponent
+        Entity d = new Entity(Entity.ENEMY, 1.0, 1.0, 1.0, 1, 1, 1, 1, 1000);
+        d.setTarget(Building.getByIndex(1));
+        population.add(d);
         
         games.add(this);
     }

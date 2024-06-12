@@ -4,7 +4,8 @@
  */
 package enshrine;
 
-import controllers.MapDisplayController;
+import enshrine.buildings.*;
+import controllers.GameDisplayController;
 import controllers.MenuDisplayController;
 import java.io.IOException;
 import javafx.application.Application;
@@ -25,6 +26,8 @@ public class Enshrine extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         Building fightingArea = new DestinationBuilding(500, 25);
+        double res[] = {1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0};
+        Building campfire = new DestinationBuilding(2700, 25, res);
         /*Building gatheringPlot = new Building(Building.USERINVENTORY, s(0.0,0.0,1.0));
         Building trainStation = new Building(Building.DISCSTATEFF, s(0.0,0.0,0.0));
         Building craftingTable = new Building(Building.USERINVENTORYEFF, s(Building.CRAFT,0.0,0.0));
@@ -61,7 +64,7 @@ public class Enshrine extends Application {
     public static void loadGame(int i, Event e, Class c){
         try{
             FXMLLoader loader = openFXML("Map", e, c);
-            MapDisplayController mdc = loader.getController();
+            GameDisplayController mdc = loader.getController();
             Game g = Game.getGameByIndex(i);
             mdc.setGame(g);
             Entity.setCurrentGame(g);

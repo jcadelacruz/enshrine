@@ -6,6 +6,7 @@ package controllers;
 
 import enshrine.Building;
 import enshrine.Entity;
+import enshrine.EntityDisplay;
 import enshrine.Game;
 import enshrine.MyTimerTask;
 import java.net.URL;
@@ -26,7 +27,7 @@ import javafx.scene.layout.VBox;
  *
  * @author dc_ca
  */
-public class MapDisplayController implements Initializable {
+public class GameDisplayController implements Initializable {
 
     @FXML private VBox taskListCol1, taskListCol2, taskListCol3, taskListCol4;
     @FXML private Button pauseBtn;
@@ -37,7 +38,7 @@ public class MapDisplayController implements Initializable {
     private boolean paused = true;
     private int turn = 0;
     
-    private static ArrayList<MapDisplayController> allMDCs = new ArrayList<>();
+    private static ArrayList<GameDisplayController> allMDCs = new ArrayList<>();
     public static int TICKRATE = 48, TURN_RESET_AT = TICKRATE*2, MOVEMODIFIER = 2, ACTIONMODIFIER;
 
     public void setGame(enshrine.Game g){
@@ -46,7 +47,7 @@ public class MapDisplayController implements Initializable {
         updatePlayArea();
     }
     public static void attemptUpdateAll() {
-        MapDisplayController mdc = allMDCs.get(0);
+        GameDisplayController mdc = allMDCs.get(0);
         if(!mdc.paused){
             //System.out.println(mdc.turn);
             mdc.updateTurn();
@@ -63,33 +64,21 @@ public class MapDisplayController implements Initializable {
     public void updatePlayArea(){
         //population
         for(Entity e : loadedGame.getPopulation()){
-            Image image;
-            try{
-                image = new Image(e.getImageFileName());
-            }
-            catch(Exception exc){
-                image = new Image(getClass().getResourceAsStream("/imgs/not.png"));
-            }
             if(e.getDisplayCharacter()==null&&!e.getInsideBuilding()){
-                //make image view
-                ImageView iv = new ImageView();
-                iv.setImage(image);
-                iv.setFitWidth(e.getWidth());
-                iv.setPreserveRatio(true);
-                iv.setSmooth(true);
-                iv.setCache(true);
-                iv.setLayoutX(e.getPos());
-                iv.setLayoutY(Game.DEFAULT_Y_POS);
-                //set in entity
+                //make entityDisplay - set in entity
+                EntityDisplay iv = new EntityDisplay(e);
                 e.setDisplayCharacter(iv);
                 //display in screen
-                playAreaAnchorPane.getChildren().add(iv);
+                playAreaAnchorPane.getChildren().add(e.getDisplayCharacter());
             }
             if(e.getDisplayCharacter()!=null){
-                if(e.getInsideBuilding()){ e.getDisplayCharacter().setVisible(false);}
-                else e.getDisplayCharacter().setVisible(true);
-                ImageView iv = e.getDisplayCharacter();
+                EntityDisplay iv = e.getDisplayCharacter();
+                //change visibility of character
+                if(e.getInsideBuilding()){ iv.setVisible(false);}
+                else iv.setVisible(true);
+                //set location of character display
                 iv.setLayoutX(e.getPos());
+                iv.setLayoutY(Game.DEFAULT_Y_POS);
                 //change image state here
             }
         }
@@ -97,6 +86,18 @@ public class MapDisplayController implements Initializable {
     public void update(){
         for(Entity e : loadedGame.getPopulation()){
             e.update(turn);
+            //check if dead
+            if(e.getStats()[0]==0){
+                switch(e.getType()){
+                    case Entity.DISCIPLE:
+                        e.setIncapacitated(true);
+                        break;
+                    case Entity.ENEMY:
+                        loadedGame.getPopulation().remove(e);
+                        e.getDisplayCharacter().setVisible(false);
+                        break;
+                }
+            }
         }
         updatePlayArea();
     }

@@ -20,7 +20,7 @@ public class Entity {
     public final static String ENEMY="HANNAH", DISCIPLE="LIKE_AND_SUBSCRIBE", USER="ITS_MAAM_ACTUALLY";
     public final static int WOOD=0, IRON=1, FOOD=2;
     public final static int MAXSPEED = 4, LCM_OF_MAXSPEED = 12;
-    public final static int STEPSIZE = 15;
+    public final static int STEPSIZE = 60;
     
     //type
     protected String type;//Type distinguishes allies from foes; allies can't damage each other
@@ -28,6 +28,7 @@ public class Entity {
         //atk
     protected double hp, maxHP, str, def;//They can attack, hence hp-maxHP str def atkSpd
     protected int atkSpd;
+    private boolean incapacitated = false;
     private Entity targetOpponent = null;
         //movement
     protected int moveSpd;//They can move, hence pos and moveSpd
@@ -35,7 +36,7 @@ public class Entity {
     private int width = 60;//CURRENTLY SET TO DEFAULT; width of the hit box
     private Building buildingAttemptingToReach = null;
     private boolean insideBuilding = false, goingRight = true;
-    private ImageView displayCharacter = null;
+    private EntityDisplay displayCharacter = null;
         //
     protected int actionSpd;//They can do building actions, hence actionSpd
         protected int iq;//They can craft, hence iq
@@ -85,6 +86,7 @@ public class Entity {
     }
             //atk
     public Entity getTargetOpponent(){ return targetOpponent;}
+    public boolean getIncapacitated(){ return incapacitated;}
             //position
     public int getPos(){ return pos;}
     public boolean getInsideBuilding(){ return insideBuilding;}
@@ -95,7 +97,7 @@ public class Entity {
                 //size
     public int getWidth(){ return width;}
         //display
-    public ImageView getDisplayCharacter(){ return displayCharacter;}
+    public EntityDisplay getDisplayCharacter(){ return displayCharacter;}
     public String getImageFileName(){ return "/imgs/not.png";}//TEMPORARY/ might not be necessary
         //inventory
             //inv-items
@@ -118,7 +120,7 @@ public class Entity {
     }
     public void setGoingRight(boolean b){ goingRight = b;}
         //display
-    public void setDisplayCharacter(ImageView iv){ displayCharacter = iv;}
+    public void setDisplayCharacter(EntityDisplay iv){ displayCharacter = iv;}
         //inv-items
     public void setItemAttemptingToCraft(Item i){ itemAttemptingToCraft = i;}
     
@@ -139,15 +141,18 @@ public class Entity {
         }
         else{
             if(targetOpponent!=null){
-                if(canThisBePerformed(turn,atkSpd)){damage(targetOpponent);}}
+                //System.out.println(type+": "+hp);
+                if(canThisBePerformed(turn,atkSpd)){
+                    damage(targetOpponent);
+                    if(targetOpponent.incapacitated) targetOpponent=null;
+                }}
             else{
                 if(findOpponentOnPath()==null){
                     if(canThisBePerformed(turn, moveSpd)){
                         try{ move();}
                         catch (OutOfGameScreenBoundsException ex) {System.out.println("Error in Entity class; update()");}
-                        
-                        if(buildingAttemptingToReach.collidesWith(pos)){
-                            insideBuilding = true;
+                        if(buildingAttemptingToReach.collidesWith(this)){
+                            if(buildingAttemptingToReach.attemptEnterBuilding(this)) insideBuilding = true;
                         }
                     }
                 }
@@ -155,6 +160,7 @@ public class Entity {
                     targetOpponent = findOpponentOnPath();
                 }
             }
+            displayCharacter.update(this);
         }
     }
         //stats
@@ -197,7 +203,22 @@ public class Entity {
     }
         //atk
     public void damage(Entity e){
-        
+        e.addHP(-this.str/e.def);
+    }
+    public void setIncapacitated(boolean b){
+        incapacitated = b;
+        if(incapacitated){
+            //change image state
+            //reset target
+            setTarget(Building.getByIndex(1));
+        }
+        if(!incapacitated){
+            //change image state
+            //reset target
+            if(buildingAttemptingToReach==Building.getByIndex(1)){
+                setTarget(Building.getByIndex(0));
+            }
+        }
     }
         //position
     public void setTarget(Building b){
@@ -244,7 +265,7 @@ public class Entity {
         //check all opponents
         for(Entity e : currentGame.getPopulation()){
             if(e.getType().equals(type)) continue;
-            if(e.collidesWith(pos+ (int)add)) return e;
+            if(e.collidesWith(pos+ (int)add) && !e.incapacitated) return e;
         }
         
         return null;
