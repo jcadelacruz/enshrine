@@ -35,4 +35,9 @@ public class DestinationBuilding extends Building {
         }
         return false;
     }
+
+    @Override
+    public String getEfficiency() {
+        return "This is the "+this.getName();
+    }
 }

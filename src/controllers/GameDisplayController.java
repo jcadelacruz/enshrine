@@ -17,11 +17,13 @@ import java.util.Timer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -144,12 +146,20 @@ public class GameDisplayController implements Initializable {
         taskListCols.add(taskListCol3);
         taskListCols.add(taskListCol4);
     }
+    public void setOnClose(){
+        Scene currentScene = pauseBtn.getScene();
+        Stage currentStage = (Stage) currentScene.getWindow();
+        currentStage.setOnCloseRequest(event -> {
+            BuildingMenuDisplayController.closeAll();
+        });
+    }
     private void initializeAll(){
         allMDCs.clear();
         allMDCs.add(this);
         initializeTaskList();
         initializeTimer();
         initializeBuildings();
+        setOnClose();
     }
     /**
      * Initializes the controller class.

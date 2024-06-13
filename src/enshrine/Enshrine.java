@@ -69,6 +69,8 @@ public class Enshrine extends Application {
             GameDisplayController mdc = loader.getController();
             Game g = Game.getGameByIndex(i);
             mdc.setGame(g);
+            try{mdc.setOnClose();}
+            catch(Exception exc){}
             Entity.setCurrentGame(g);
             Game.setCurrentGame(g);
         }

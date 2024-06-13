@@ -4,6 +4,7 @@
  */
 package enshrine;
 
+import controllers.BuildingMenuDisplayController;
 import java.io.IOException;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
@@ -116,6 +117,9 @@ public class BuildingDisplay extends VBox{
     }
 
     private void openBuildingMenu() {
+        //close all
+        BuildingMenuDisplayController.closeAll();
+        //open new
         FXMLLoader loader = null;
         try{
             //get current display
@@ -129,7 +133,8 @@ public class BuildingDisplay extends VBox{
             newStage.setScene(scene);
             newStage.show();
             //set building
-            loader.getController();
+            BuildingMenuDisplayController controller = loader.getController();
+            controller.displayBuilding(this);
         }
         catch(IOException exception){
             //error

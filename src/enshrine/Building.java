@@ -18,6 +18,7 @@ public abstract class Building {
     protected double[] effects = new double[8];//im not sure if 8 is the max possible amt
     protected boolean built = false;
     private int pos, width;//see Entity class for details
+    private int level;
     private BuildingDisplay display;
     private String imageFileName;
 
@@ -30,6 +31,7 @@ public abstract class Building {
         effects = ef;
         pos = p;
         width = w;
+        level = 1;
         allBuildings.add(this);
     }
     /*public Building(double id, double[] ef){
@@ -46,8 +48,10 @@ public abstract class Building {
     //getters
     public int getPos(){ return pos;}
     public int getWidth(){ return width;}
+    public int getLevel(){ return level;}
     public String getType(){ return type;}
     public String getName(){ return name;}
+    public abstract String getEfficiency();
     public boolean getBuilt(){ return built;}
     public BuildingDisplay getDisplay(){ return display;}
     public String getImageFileName(){ return imageFileName;}

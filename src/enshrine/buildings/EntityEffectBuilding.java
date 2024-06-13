@@ -20,5 +20,14 @@ public class EntityEffectBuilding extends Building{
     public void performBuildingFunction(Entity e) {
         e.addStat(this.effects);
     }
+
+    @Override
+    public String getEfficiency() {
+        String eff = "";
+        for(double d : effects){
+            eff+= (d+", ");
+        }
+        return eff;
+    }
     
 }
