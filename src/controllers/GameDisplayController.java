@@ -48,6 +48,7 @@ public class GameDisplayController implements Initializable {
         loadedGame = g;
         Game.setCurrentGame(g);
         updatePlayArea();
+        setOnClose();
     }
     public static void attemptUpdateAll() {
         GameDisplayController mdc = allMDCs.get(0);
@@ -159,7 +160,6 @@ public class GameDisplayController implements Initializable {
         initializeTaskList();
         initializeTimer();
         initializeBuildings();
-        setOnClose();
     }
     /**
      * Initializes the controller class.
