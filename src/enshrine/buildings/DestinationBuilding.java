@@ -13,13 +13,15 @@ import enshrine.Entity;
  * @author dc_ca
  */
 public class DestinationBuilding extends Building {
-    public DestinationBuilding(int p, int w){
-        super(Building.VOID, Enshrine.s(0,0,0), p, w);
+    public DestinationBuilding(String n, int p, int w){
+        super(n, Building.VOID, Enshrine.s(0,0,0), p, w);
         double res[] = {0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0};
         effects = res;
+        built = true;
     }
-    public DestinationBuilding(int p, int w, double e[]){
-        super(Building.USERSTATEFF, e, p, w);
+    public DestinationBuilding(String n, int p, int w, double e[]){
+        super(n, Building.USERSTATEFF, e, p, w);
+        built = true;
     }
     
     @Override

@@ -4,6 +4,7 @@
  */
 package controllers;
 
+import enshrine.BuildingDisplay;
 import enshrine.Building;
 import enshrine.Entity;
 import enshrine.EntityDisplay;
@@ -84,7 +85,7 @@ public class GameDisplayController implements Initializable {
         }
     }
     public void update(){
-        for(Entity e : loadedGame.getPopulation()){
+        try{for(Entity e : loadedGame.getPopulation()){
             e.update(turn);
             //check if dead
             if(e.getStats()[0]==0){
@@ -98,12 +99,39 @@ public class GameDisplayController implements Initializable {
                         break;
                 }
             }
+        }}
+        catch(java.util.ConcurrentModificationException exc){
+            //System.out.println("Error");//i have no idea how to fix this exception from not occurring
         }
         updatePlayArea();
     }
-    public void buildBuilding(Building b){
-        b.build();
-        updatePlayArea();
+    public void displayBuildings(ArrayList<Building> b){
+        for(Building c:b){displayBuildings(c);}
+    }
+    public void displayBuildings(Building b){
+        if(b.getDisplay()==null){
+            //make buildingDisplay - set in Building
+            BuildingDisplay iv = new BuildingDisplay(b);
+            b.setDisplay(iv);
+            //display in screen
+            playAreaAnchorPane.getChildren().add(b.getDisplay());
+        }
+        if(b.getDisplay()!=null){
+            BuildingDisplay iv = b.getDisplay();
+            //set location of buildingdisplay
+            iv.setLayoutX(b.getPos());
+            iv.setLayoutY(BuildingDisplay.STANDARD_Y_POS);
+            //change image state here
+                //change built-ness of building
+            if(b.getBuilt()){ iv.setBuiltImage(true);}
+            else iv.setBuiltImage(false);
+        }
+    }
+    public void initializeBuildings(){
+        //set array of buildings to make
+        ArrayList<Building> buildingsToInitialize = Building.getAllBuildings();
+        //display all
+        displayBuildings(buildingsToInitialize);
     }
     public void initializeTimer(){
         Timer timer = new Timer("delay", true);
@@ -121,6 +149,7 @@ public class GameDisplayController implements Initializable {
         allMDCs.add(this);
         initializeTaskList();
         initializeTimer();
+        initializeBuildings();
     }
     /**
      * Initializes the controller class.

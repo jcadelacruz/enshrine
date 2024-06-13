@@ -48,7 +48,7 @@ public class Game{
                 randomNumber = new Random().nextInt(wah);
                 //System.out.println("attempting rand num: "+randomNumber);
                 for(int l : taken){
-                    System.out.println(" checking: "+randomNumber+" with: "+l);
+                    //System.out.println(" checking: "+randomNumber+" with: "+l);
                     if(l<randomNumber && randomNumber<l+WIDTH) picked = false;
                     if(randomNumber<l && l<randomNumber+WIDTH) picked = false;
                 }

@@ -14,14 +14,18 @@ public abstract class Building {
     public static final String USERSTATEFF="USER_STATS", DISCSTATEFF="DISCIPLE_STATS", USERINVENTORYEFF="USER_NON-MATERIAL_INVENTORY", VOID="HOMERSIMPSON";
     public static final double USERSTAT=9876, USERINVENTORY=1234, TAKE=1473, GIVE=6173, CRAFT=37421, FIGHT=91641, LEARN=73425;
     
-    private String type;
+    private String name, type;
     protected double[] effects = new double[8];//im not sure if 8 is the max possible amt
-    private boolean built = false;
+    protected boolean built = false;
     private int pos, width;//see Entity class for details
+    private BuildingDisplay display;
+    private String imageFileName;
 
     public static ArrayList<Building> allBuildings = new ArrayList<>();
     
-    public Building(String t, double[] ef, int p, int w){
+    public Building(String n, String t, double[] ef, int p, int w){
+        name = n;
+        imageFileName = n;
         type = t;
         effects = ef;
         pos = p;
@@ -43,13 +47,17 @@ public abstract class Building {
     public int getPos(){ return pos;}
     public int getWidth(){ return width;}
     public String getType(){ return type;}
+    public String getName(){ return name;}
     public boolean getBuilt(){ return built;}
+    public BuildingDisplay getDisplay(){ return display;}
+    public String getImageFileName(){ return imageFileName;}
         //static
     public static ArrayList<Building> getAllBuildings(){ return allBuildings;}
     public static Building getByIndex(int i){ return allBuildings.get(i);}
     
     //setters
-    public void build(){ built = true;}
+    public void setBuilt(Boolean b){ built = b;}
+    public void setDisplay(BuildingDisplay b){ display = b;}
     
     //methods
     public abstract void performBuildingFunction(Entity e);
@@ -59,5 +67,8 @@ public abstract class Building {
         if(p<pos && pos<p+w) return true;
         return false;
     }
-    public abstract boolean attemptEnterBuilding(Entity e);
+    public boolean attemptEnterBuilding(Entity e){
+        if(built) return true;
+        else return false;
+    }
 }
