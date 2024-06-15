@@ -11,13 +11,13 @@ import java.util.ArrayList;
  * @author dc_ca
  */
 public abstract class Building {
-    public static final String USERSTATEFF="USER_STATS", DISCSTATEFF="DISCIPLE_STATS", USERINVENTORYEFF="USER_NON-MATERIAL_INVENTORY", VOID="HOMERSIMPSON";
+    public static final String VOID="HOMERSIMPSON", GATHERING="BARKBARK", STORAGE="SILOS", TRAINING="WOOF", CRAFTING="MIBECRAFT", SPECIAL="CAMPFIRES_ARE_ANNOYING";
     public static final double USERSTAT=9876, USERINVENTORY=1234, TAKE=1473, GIVE=6173, CRAFT=37421, FIGHT=91641, LEARN=73425;
     
     private String name, type;
     protected double[] effects = new double[8];//im not sure if 8 is the max possible amt
     protected boolean built = false;
-    private int pos, width;//see Entity class for details
+    protected int pos, width;//see Entity class for details
     private int level;
     private BuildingDisplay display;
     private String imageFileName;

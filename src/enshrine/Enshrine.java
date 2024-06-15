@@ -23,16 +23,39 @@ import javafx.stage.Stage;
  */
 public class Enshrine extends Application {
     
+    public static int fightArea=0, craftTable=0;//change craft table
+    
     @Override
     public void start(Stage stage) throws Exception {
         Building fightingArea = new DestinationBuilding("Fighting Area", 500, 250);
         double res[] = {1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0};
         Building campfire = new DestinationBuilding("Campfire", 2700, 250, res);
         double strength[] = {0.0,0.0,0.05,0.0,0.0,0.0,0.0,0.0};
-        Building cubaoStation = new EntityEffectBuilding("Train Station", strength, 2270, 290);
+        Building cubaoStation = new GatheringBuilding("Train Station", strength, 2270, 290);
         /*Building gatheringPlot = new Building(Building.USERINVENTORY, s(0.0,0.0,1.0));
         Building trainStation = new Building(Building.DISCSTATEFF, s(0.0,0.0,0.0));
         Building craftingTable = new Building(Building.USERINVENTORYEFF, s(Building.CRAFT,0.0,0.0));
+        
+        DESTINATION no eff
+            fighting area
+        GATHERING discres
+            wood
+            iron
+            food
+        SILOS -discres, userres
+            wood
+            iron
+            food    
+        TRAINING discstat
+            str training
+            library iq
+        CRAFTING userinv, -userres
+            open menu
+        SPECIAL/SACRIFICE userstat, -userinv
+            open menu + can enter
+        
+        
+        
         */
         //FXMLLoader loader = new FXMLLoader(getClass().getResource("/displays/MenuDisplay.fxml"));
         Parent root = FXMLLoader.load(getClass().getResource("/displays/MenuDisplay.fxml"));

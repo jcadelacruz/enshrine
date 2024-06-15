@@ -4,7 +4,12 @@
  */
 package enshrine;
 
+import controllers.EntityMenuDisplayController;
 import controllers.GameDisplayController;
+import java.io.IOException;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.effect.ColorAdjust;
@@ -14,6 +19,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 
 /**
  *
@@ -21,6 +27,7 @@ import javafx.scene.text.Text;
  */
 public class EntityTaskDisplay extends HBox{
     public static int HEIGHT=50, WIDTH=175, MOVE_BUTTON_WIDTH = 25, IMAGEVIEW_WIDTH = 30, INNERVBOX_WIDTH=WIDTH-((2*MOVE_BUTTON_WIDTH)+IMAGEVIEW_WIDTH);
+    public static int COL_COUNT=4;
     
     //nodes
     private Button leftButton, rightButton;
@@ -32,6 +39,7 @@ public class EntityTaskDisplay extends HBox{
     //stats
     private int colNum;
     private Entity entity;
+    int train = 0, gather = 0;//put this in Entity.java?
     //static
     private static GameDisplayController currentGDC;
 
@@ -110,32 +118,90 @@ public class EntityTaskDisplay extends HBox{
     public static void setGDC(GameDisplayController t){ currentGDC = t;}
 
     //methods
-    private void toggleActivity() {
-        switch(colNum){
-            case 0:
-                break;
-            case 1:
-                break;
-            case 2:
-                break;
-            case 3:
-                break;
-            default:
-                
-        }
-    }
-    private void openEntityDisplay(){
-        //open display
-    }
     private void moveEntityTaskDisplay(boolean goingRight){
         int change = -1;
         if(goingRight) change = 1;
         
         //add check here?
         
+	//actual moving
         currentGDC.removeEntityTaskList(entity, colNum);
         colNum += change;
         currentGDC.addEntityTaskList(entity);
+	//whatever effect
+	switch(colNum){
+            case 0://fight
+                entity.setTarget(Building.getByIndex(Enshrine.fightArea));
+                break;
+            case 1://train
+		entity.setTarget(Building.getTrainingBuildings().get(train));
+                break;
+            case 2://craft
+                entity.setTarget(Building.getByIndex(Enshrine.craftTable));
+                break;
+            case 3://gather
+		entity.setTarget(Building.getGatheringBuildings().get(gather));
+                break;
+            default:
+                
+        }
+        
+	//check buttons
+	checkMoveButtonLimits();
+    }
+    private void checkMoveButtonLimits(){
+	leftButton.setDisable(false);
+	rightButton.setDisable(false);
+	if(colNum==0) leftButton.setDisable(true);
+	if(colNum==COL_COUNT) rightButton.setDisable(true);
+    }
+    private void toggleActivity() {
+        switch(colNum){
+            case 0://fight
+                break;
+            case 1://train
+		train++;
+		if(train==2) train=0;
+		entity.setTarget(Building.getTrainingBuildings().get(train));
+                break;
+            case 2://craft
+		openCraftMenu();
+                break;
+            case 3://gather
+		gather++;
+		if(gather==3) gather=0;
+		entity.setTarget(Building.getGatheringBuildings().get(gather));
+                break;
+            default:
+                
+        }
+    }
+    private void openCraftMenu(){
+        
+    }
+    private void openEntityDisplay(){
+        //close all
+        EntityMenuDisplayController.closeAll();
+        //open new
+        FXMLLoader loader = null;
+        try{
+            //get current display
+            Scene currentScene = this.getScene();
+            Stage newStage = new Stage();
+            //get new display
+            loader = new FXMLLoader(getClass().getResource("/displays/BuildingMenuDisplay.fxml"));
+            Parent root = loader.load();
+            Scene scene = new Scene(root);
+            //show display
+            newStage.setScene(scene);
+            newStage.show();
+            //set entity
+            EntityMenuDisplayController controller = loader.getController();
+            controller.displayEntity(entity);
+        }
+        catch(IOException exception){
+            //error
+        }
     }
 
         //aesthetic

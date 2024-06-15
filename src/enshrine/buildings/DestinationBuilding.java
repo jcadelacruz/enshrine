@@ -19,22 +19,9 @@ public class DestinationBuilding extends Building {
         effects = res;
         built = true;
     }
-    public DestinationBuilding(String n, int p, int w, double e[]){
-        super(n, Building.USERSTATEFF, e, p, w);
-        built = true;
-    }
     
     @Override
     public void performBuildingFunction(Entity e){}
-    public boolean attemptEnterBuilding(Entity e){
-        if(e.getType().equals(Entity.DISCIPLE)){
-            e.addStat(effects);
-            if(e.getIncapacitated()&&e.getStats()[0]==e.getStats()[1]){
-                e.setIncapacitated(false);
-            }
-        }
-        return false;
-    }
 
     @Override
     public String getEfficiency() {
