@@ -21,16 +21,18 @@ public class SacrificeBuilding extends Building{
     public void performBuildingFunction(Entity e){}
     @Override
     public boolean collidesWith(Entity e){
+        boolean colliding = false;
+        int p = e.getPos(), w = e.getWidth();
+        if(pos<p && p<pos+width) colliding=true;
+        if(p<pos && pos<p+w) colliding=true;
+        
+        if(!colliding) return false;
         if(e.getType().equals(Entity.DISCIPLE)){
             e.addStat(effects);
             if(e.getIncapacitated()&&e.getStats()[0]==e.getStats()[1]){
                 e.setIncapacitated(false);
             }
         }
-        
-        int p = e.getPos(), w = e.getWidth();
-        if(pos<p && p<pos+width) return true;
-        if(p<pos && pos<p+w) return true;
         return false;
     }
 

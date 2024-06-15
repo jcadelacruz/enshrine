@@ -42,7 +42,7 @@ public class Enshrine extends Application {
         Building shb2f = new TrainingBuilding("Library", iq, 2300, 140, 0);
         double res[] = {1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0};
         Building craftingTable = new DestinationBuilding("Crafting Table", 2450, 200);
-        Building campfire = new DestinationBuilding("Campfire", 2700, 250);
+        Building campfire = new SacrificeBuilding("Campfire", 2700, 250, res);
         /*Building gatheringPlot = new Building(Building.USERINVENTORY, s(0.0,0.0,1.0));
         Building trainStation = new Building(Building.DISCSTATEFF, s(0.0,0.0,0.0));
         Building craftingTable = new Building(Building.USERINVENTORYEFF, s(Building.CRAFT,0.0,0.0));
