@@ -13,6 +13,7 @@ import java.util.ArrayList;
 public abstract class Building {
     public static final String VOID="HOMERSIMPSON", GATHERING="BARKBARK", STORAGE="SILOS", TRAINING="WOOF", CRAFTING="MIBECRAFT", SPECIAL="CAMPFIRES_ARE_ANNOYING";
     public static final double USERSTAT=9876, USERINVENTORY=1234, TAKE=1473, GIVE=6173, CRAFT=37421, FIGHT=91641, LEARN=73425;
+
     
     private String name, type;
     protected double[] effects = new double[8];//im not sure if 8 is the max possible amt
@@ -57,7 +58,15 @@ public abstract class Building {
     public String getImageFileName(){ return imageFileName;}
         //static
     public static ArrayList<Building> getAllBuildings(){ return allBuildings;}
+    public static ArrayList<Building> getGatheringBuildings() { return getBuildings(Enshrine.gatherStart,Enshrine.gatherEnd);}
+    public static ArrayList<Building> getStorageBuildings() { return getBuildings(Enshrine.siloStart,Enshrine.siloEnd);}
+    public static ArrayList<Building> getTrainingBuildings() { return getBuildings(Enshrine.trainStart,Enshrine.trainEnd);}
     public static Building getByIndex(int i){ return allBuildings.get(i);}
+    public static ArrayList<Building> getBuildings(int start, int end) {
+        ArrayList<Building> b = new ArrayList<>();
+        for(int i=start; i<=end; i++){ b.add(allBuildings.get(i));}
+        return b;
+    }
     
     //setters
     public void setBuilt(Boolean b){ built = b;}

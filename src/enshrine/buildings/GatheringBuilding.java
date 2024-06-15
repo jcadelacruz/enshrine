@@ -18,7 +18,7 @@ public class GatheringBuilding extends Building{
 
     public GatheringBuilding(String n, double[] ef, int p, int w, int i) {
         super(n, Building.GATHERING, ef, p, w);
-        produce = 0;
+        produce = i;
     }
     @Override
     public void performBuildingFunction(Entity e) {
@@ -33,6 +33,7 @@ public class GatheringBuilding extends Building{
             //effects should be greater than 0
         } catch (OutOfResourceCapacityBoundsException ex) {
             //PUT OUT OF CAPACITY HERE
+            e.addMaterialsUntilAble(ef);
             outOfCapacity(e);
         }
     }

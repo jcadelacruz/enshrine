@@ -320,6 +320,37 @@ public class Entity {
                 System.out.println("Error in Entity class, attemptAddMaterials(): lol what even u tryna do"+WOOD+IRON+FOOD);
         }
     }
+    public int[] addMaterialsUntilAble(int[] m){
+        int res[] = new int[3];
+        for(int i = 0; i<3; i++){
+            res[i] = addMaterialsUntilAble(m[i], i);
+        }
+        return res;
+    }
+    public int addMaterialsUntilAble(int count, int index){
+        int m=0;
+        //add
+        switch(index){
+            case Entity.WOOD:
+                woodCnt+=count;
+                m = woodCnt-capacity;
+                if(woodCnt>capacity) woodCnt=capacity;
+                return m;
+            case Entity.IRON:
+                ironCnt+=count;
+                m = ironCnt-capacity;
+                if(ironCnt>capacity) ironCnt=capacity;
+                return m;
+            case Entity.FOOD:
+                foodCnt+=count;
+                m = foodCnt-capacity;
+                if(foodCnt>capacity) foodCnt=capacity;
+                return m;
+            default:
+                System.out.println("Error in Entity class, attemptAddMaterials(): lol what even u tryna do"+WOOD+IRON+FOOD);
+        }
+        return m;
+    }
     public boolean canAfford(int count, int index){
         boolean affordable = false;
         switch(index){

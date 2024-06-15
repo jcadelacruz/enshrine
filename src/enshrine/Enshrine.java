@@ -23,35 +23,44 @@ import javafx.stage.Stage;
  */
 public class Enshrine extends Application {
     
-    public static int fightArea=0, craftTable=0;//change craft table
+    public static int fightArea=0, gatherStart=1, gatherEnd=3, siloStart=4, siloEnd=6, trainStart=7, trainEnd = 8, craftTable=9, campFir=10;//change craft table
     
     @Override
     public void start(Stage stage) throws Exception {
         Building fightingArea = new DestinationBuilding("Fighting Area", 500, 250);
+        double wood[] = {1.0,0,0}, iron[]={0,1.0,0}, food[]={0,1.0,0};
+        Building forest = new GatheringBuilding("Forestry", wood, 1250, 200, 0);
+        Building weBackInThe = new GatheringBuilding("Mines", iron, 1500, 150, 1);
+        Building coop = new GatheringBuilding("Chiken", food, 1730, 175, 2);
+        
+        Building siloW = new StorageBuilding("Wood", 2100, 100, 0);
+        Building siloI = new StorageBuilding("Iron", 2200, 100, 1);
+        Building siloF = new StorageBuilding("Food", 2300, 100, 2);
+        
+        
         double res[] = {1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0};
         Building campfire = new DestinationBuilding("Campfire", 2700, 250, res);
         double strength[] = {0.0,0.0,0.05,0.0,0.0,0.0,0.0,0.0};
-        Building cubaoStation = new GatheringBuilding("Train Station", strength, 2270, 290);
         /*Building gatheringPlot = new Building(Building.USERINVENTORY, s(0.0,0.0,1.0));
         Building trainStation = new Building(Building.DISCSTATEFF, s(0.0,0.0,0.0));
         Building craftingTable = new Building(Building.USERINVENTORYEFF, s(Building.CRAFT,0.0,0.0));
         
-        DESTINATION no eff
+        DESTINATION no eff 0
             fighting area
-        GATHERING discres
+        GATHERING discres 1-3
             wood
             iron
             food
-        SILOS -discres, userres
+        SILOS -discres, userres 4-6
             wood
             iron
             food    
-        TRAINING discstat
+        TRAINING discstat 7-8
             str training
             library iq
-        CRAFTING userinv, -userres
+        CRAFTING userinv, -userres 9
             open menu
-        SPECIAL/SACRIFICE userstat, -userinv
+        SPECIAL/SACRIFICE userstat, -userinv 10
             open menu + can enter
         
         
