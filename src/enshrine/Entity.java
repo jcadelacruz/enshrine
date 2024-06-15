@@ -16,13 +16,13 @@ import java.util.ArrayList;
  * @author dc_ca
  */
 public class Entity {
-    public final static String ENEMY="HANNAH", DISCIPLE="LIKE_AND_SUBSCRIBE", USER="ITS_MAAM_ACTUALLY";
+    public final static String ENEMY="HANNAH", DISCIPLE="SLAVE", USER="ITS_MAAM_ACTUALLY";
     public final static int WOOD=0, IRON=1, FOOD=2;
     public final static int MAXSPEED = 4, LCM_OF_MAXSPEED = 12;
     public final static int STEPSIZE = 15;
     
     //type
-    protected String type;//Type distinguishes allies from foes; allies can't damage each other
+    protected String name, type;//Type distinguishes allies from foes; allies can't damage each other
     //general stats
         //atk
     protected double hp, maxHP, str, def;//They can attack, hence hp-maxHP str def atkSpd
@@ -49,8 +49,12 @@ public class Entity {
     
     //static
     private static Game currentGame;
+    private static int id=1;
     
     public Entity(String t, double h, double s, double d, int ms, int ats, int as, int i, int p){
+        name = t+"-"+id;
+        id++;
+        
         type = t;
         switch(type){
             case ENEMY:
@@ -78,6 +82,7 @@ public class Entity {
     }
     
     //getters
+    public String getName(){ return name;}
     public String getType(){ return type;}
         //stats
     public double[] getStats(){
@@ -122,6 +127,7 @@ public class Entity {
     public void setGoingRight(boolean b){ goingRight = b;}
         //display
     public void setDisplayCharacter(EntityDisplay iv){ displayCharacter = iv;}
+    public void setTaskDisplay(EntityTaskDisplay iv){ taskDisplay = iv;}
         //inv-items
     public void setItemAttemptingToCraft(Item i){ itemAttemptingToCraft = i;}
     
@@ -215,8 +221,9 @@ public class Entity {
             //change image state
             //reset target
             if(buildingAttemptingToReach==Building.getByIndex(Enshrine.campFir)){
-                setTarget(Building.getByIndex(Enshrine.fightArea));
-                //change place
+                taskDisplay.moveEntityTaskDisplay(0);
+                //change EntityTaskDisplay
+                
             }
         }
     }

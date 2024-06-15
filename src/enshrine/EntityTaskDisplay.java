@@ -39,12 +39,18 @@ public class EntityTaskDisplay extends HBox{
     //stats
     private int colNum;
     private Entity entity;
-    int train = 0, gather = 0;//put this in Entity.java?
+    private int train = 0, gather = 0;//put this in Entity.java?
     //static
     private static GameDisplayController currentGDC;
 
     public EntityTaskDisplay(Entity e){
         entity = e;
+        int b = e.getBuildingAttemptingToReach().getIndex();
+        if(b==Enshrine.fightArea) colNum=GameDisplayController.fightCol;
+        else if(Enshrine.trainStart<=b&&b<=Enshrine.trainEnd) colNum=GameDisplayController.trainCol;
+        else if(b==Enshrine.craftTable) colNum=GameDisplayController.craftCol;
+        else if(Enshrine.gatherStart<=b&&b<=Enshrine.gatherEnd) colNum=GameDisplayController.gatherCol;
+        else System.out.println("error in EntityTaskDisplay constructor");
         
         this.setMaxHeight(HEIGHT);
         this.setMaxWidth(WIDTH);
@@ -59,15 +65,19 @@ public class EntityTaskDisplay extends HBox{
         //buttons
         leftButton = new Button("<");
         leftButton.setMaxHeight(HEIGHT);
-        leftButton.setMaxWidth(WIDTH);
+        leftButton.setMaxWidth(MOVE_BUTTON_WIDTH);
         leftButton.setMinHeight(HEIGHT);
-        leftButton.setMinWidth(WIDTH);
+        leftButton.setMinWidth(MOVE_BUTTON_WIDTH);
         leftButton.setPrefHeight(HEIGHT);
-        leftButton.setPrefWidth(WIDTH);
+        leftButton.setPrefWidth(MOVE_BUTTON_WIDTH);
         
         rightButton = new Button(">");
+        rightButton.setMaxHeight(HEIGHT);
+        rightButton.setMaxWidth(MOVE_BUTTON_WIDTH);
+        rightButton.setMinHeight(HEIGHT);
+        rightButton.setMinWidth(MOVE_BUTTON_WIDTH);
         rightButton.setPrefHeight(HEIGHT);
-        rightButton.setPrefWidth(WIDTH);
+        rightButton.setPrefWidth(MOVE_BUTTON_WIDTH);
             //functions
         leftButton.setOnAction(event->{moveEntityTaskDisplay(false);});
         rightButton.setOnAction(event->{moveEntityTaskDisplay(true);});
@@ -84,10 +94,10 @@ public class EntityTaskDisplay extends HBox{
 
         //innerVBox
         innerVBox = new VBox();
-        /*innerVBox.setMaxHeight(Double.MAX_VALUE);
-        innerVBox.setMaxWidth(Double.MAX_VALUE);
-        innerVBox.setMinHeight(0);
-        innerVBox.setMinWidth(0);*/
+        innerVBox.setMaxHeight(HEIGHT);
+        innerVBox.setMaxWidth(INNERVBOX_WIDTH);
+        innerVBox.setMinHeight(HEIGHT);
+        innerVBox.setMinWidth(INNERVBOX_WIDTH);
         innerVBox.setPrefHeight(HEIGHT);
         innerVBox.setPrefWidth(INNERVBOX_WIDTH);
 
@@ -110,6 +120,7 @@ public class EntityTaskDisplay extends HBox{
         innerVBox.setOnMouseClicked(event -> {toggleActivity();});
 
         this.getChildren().addAll(leftButton, img, innerVBox, rightButton);
+        checkMoveButtonLimits();
     }
     
     //getters
@@ -124,7 +135,10 @@ public class EntityTaskDisplay extends HBox{
         
         //add check here?
         
-	//actual moving
+        moveEntityTaskDisplay(change);
+    }
+    public void moveEntityTaskDisplay(int change){
+	//actual moving of etd
         currentGDC.removeEntityTaskList(entity, colNum);
         colNum += change;
         currentGDC.addEntityTaskList(entity);
@@ -153,7 +167,7 @@ public class EntityTaskDisplay extends HBox{
 	leftButton.setDisable(false);
 	rightButton.setDisable(false);
 	if(colNum==0) leftButton.setDisable(true);
-	if(colNum==COL_COUNT) rightButton.setDisable(true);
+	if(colNum==COL_COUNT-1) rightButton.setDisable(true);
     }
     private void toggleActivity() {
         switch(colNum){
@@ -211,7 +225,6 @@ public class EntityTaskDisplay extends HBox{
 
         this.setEffect(colorAdjust);
     }
-
     private void removeLightEffect() {
         this.setEffect(null);
     }

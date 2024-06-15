@@ -29,13 +29,13 @@ public class Enshrine extends Application {
     public void start(Stage stage) throws Exception {
         Building fightingArea = new DestinationBuilding("Fighting Area", 500, 250);
         double wood[] = {1.0,0,0}, iron[]={0,1.0,0}, food[]={0,1.0,0};
-        Building forest = new GatheringBuilding("Forestry", wood, 1250, 200, 0);
-        Building weBackInThe = new GatheringBuilding("Mines", iron, 1500, 150, 1);
-        Building coop = new GatheringBuilding("Chiken", food, 1730, 175, 2);
+        Building forest = new GatheringBuilding("Forestry", wood, 1200, 200, 0);
+        Building weBackInThe = new GatheringBuilding("Mines", iron, 1430, 150, 1);
+        Building coop = new GatheringBuilding("Chiken", food, 1600, 175, 2);
         
-        Building siloW = new StorageBuilding("Wood", 1830, 100, 0);
-        Building siloI = new StorageBuilding("Iron", 1930, 100, 1);
-        Building siloF = new StorageBuilding("Food", 2030, 100, 2);
+        Building siloW = new StorageBuilding("Wood", 1800, 100, 0);
+        Building siloI = new StorageBuilding("Iron", 1910, 100, 1);
+        Building siloF = new StorageBuilding("Food", 2020, 100, 2);
         
         double str[] = {0.0,0.0,0.05,0.0,0.0,0.0,0.0,0.0}, iq[] = {0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.05};
         Building cubao = new TrainingBuilding("Train Station", str, 2140, 150, 0);

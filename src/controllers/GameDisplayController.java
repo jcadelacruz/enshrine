@@ -42,12 +42,14 @@ public class GameDisplayController implements Initializable {
     
     private static ArrayList<GameDisplayController> allMDCs = new ArrayList<>();
     public static int TICKRATE = 48, TURN_RESET_AT = TICKRATE*2, MOVEMODIFIER = 2, ACTIONMODIFIER;
+    public static int fightCol=0, trainCol=1, craftCol=2, gatherCol=3;
 
     public void setGame(enshrine.Game g){
         loadedGame = g;
         Game.setCurrentGame(g);
         updatePlayArea();
         setOnClose();
+        initializeEntityTaskDisplays();
     }
     public static void attemptUpdateAll() {
         GameDisplayController mdc = allMDCs.get(0);
@@ -95,7 +97,9 @@ public class GameDisplayController implements Initializable {
             displayEntity(c);
         }
     }
-    public void addEntityTaskList(Entity e){ addEntityTaskList(e, e.getTaskDisplay().getColNum());}
+    public void addEntityTaskList(Entity e){
+        addEntityTaskList(e, e.getTaskDisplay().getColNum());
+    }
     public void addEntityTaskList(Entity e, int colNum){
         EntityTaskDisplay t = e.getTaskDisplay();
         VBox v = taskListCols.get(colNum);
@@ -147,7 +151,15 @@ public class GameDisplayController implements Initializable {
             else iv.setBuiltImage(false);
         }
     }
-    public void initializeBuildings(){
+    private void initializeEntityTaskDisplays(){
+        for(Entity e:Game.getCurrentGame().getPopulation()){
+            if(e.getType().equals(Entity.DISCIPLE)){
+                e.setTaskDisplay(new EntityTaskDisplay(e));
+                addEntityTaskList(e);
+            }
+        }
+    }
+    private void initializeBuildings(){
         //set array of buildings to make
         ArrayList<Building> buildingsToInitialize = Building.getAllBuildings();
         //display all

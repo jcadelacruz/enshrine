@@ -50,6 +50,7 @@ public abstract class Building {
     public int getPos(){ return pos;}
     public int getWidth(){ return width;}
     public int getLevel(){ return level;}
+    public int getIndex(){ return allBuildings.indexOf(this);}
     public String getType(){ return type;}
     public String getName(){ return name;}
     public abstract String getEfficiency();
