@@ -1,0 +1,45 @@
+ALL FOR EntityTaskDisplay.java
+int train = 0, gather = 0;//put this in Entity.java?
+
+    private void moveEntityTaskDisplay(boolean goingRight){
+        int change = -1;
+        if(goingRight) change = 1;
+        
+        //add check here?
+        
+	//actual moving
+        currentGDC.removeEntityTaskList(entity, colNum);
+        colNum += change;
+        currentGDC.addEntityTaskList(entity);
+	//whatever effect
+	
+	//check buttons
+	checkMoveButtonLimits();
+    }
+    private void checkMoveButtonLimits(){
+	leftButton.setDisable(false);
+	rightButton.setDisable(false);
+	if(colNum==0) leftButton.setDisable(true);
+	if(colNum==COL_LIMIT) rightButton.setDisable(true);
+    }
+    private void toggleActivity() {
+        switch(colNum){
+            case 0://fight
+                break;
+            case 1://train
+		train++;
+		if(train==2) train=0;
+		entity.setTarget(Building.getTrainingBuildings().get(train));
+                break;
+            case 2://craft
+		openCraftMenu();
+                break;
+            case 3://gather
+		gather++;
+		if(gather==3) gather=0;
+		entity.setTarget(Building.getGatheringBuildings().get(gather));
+                break;
+            default:
+                
+        }
+    }
