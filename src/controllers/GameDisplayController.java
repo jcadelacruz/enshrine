@@ -67,6 +67,7 @@ public class GameDisplayController implements Initializable {
     public void update(){
         try{for(Entity e : loadedGame.getPopulation()){
             e.update(turn);
+            //System.out.println(e.getType()+": going to "+e.getBuildingAttemptingToReach().getName());
             //check if dead
             if(e.getStats()[0]==0){
                 switch(e.getType()){

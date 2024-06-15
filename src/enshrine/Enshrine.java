@@ -33,14 +33,16 @@ public class Enshrine extends Application {
         Building weBackInThe = new GatheringBuilding("Mines", iron, 1500, 150, 1);
         Building coop = new GatheringBuilding("Chiken", food, 1730, 175, 2);
         
-        Building siloW = new StorageBuilding("Wood", 2100, 100, 0);
-        Building siloI = new StorageBuilding("Iron", 2200, 100, 1);
-        Building siloF = new StorageBuilding("Food", 2300, 100, 2);
+        Building siloW = new StorageBuilding("Wood", 1830, 100, 0);
+        Building siloI = new StorageBuilding("Iron", 1930, 100, 1);
+        Building siloF = new StorageBuilding("Food", 2030, 100, 2);
         
-        
+        double str[] = {0.0,0.0,0.05,0.0,0.0,0.0,0.0,0.0}, iq[] = {0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.05};
+        Building cubao = new TrainingBuilding("Train Station", str, 2140, 150, 0);
+        Building shb2f = new TrainingBuilding("Library", iq, 2300, 140, 0);
         double res[] = {1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0};
-        Building campfire = new DestinationBuilding("Campfire", 2700, 250, res);
-        double strength[] = {0.0,0.0,0.05,0.0,0.0,0.0,0.0,0.0};
+        Building craftingTable = new DestinationBuilding("Crafting Table", 2450, 200);
+        Building campfire = new DestinationBuilding("Campfire", 2700, 250);
         /*Building gatheringPlot = new Building(Building.USERINVENTORY, s(0.0,0.0,1.0));
         Building trainStation = new Building(Building.DISCSTATEFF, s(0.0,0.0,0.0));
         Building craftingTable = new Building(Building.USERINVENTORYEFF, s(Building.CRAFT,0.0,0.0));
@@ -62,8 +64,6 @@ public class Enshrine extends Application {
             open menu
         SPECIAL/SACRIFICE userstat, -userinv 10
             open menu + can enter
-        
-        
         
         */
         //FXMLLoader loader = new FXMLLoader(getClass().getResource("/displays/MenuDisplay.fxml"));

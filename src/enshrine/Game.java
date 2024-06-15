@@ -70,12 +70,12 @@ public class Game{
             taken.add(randomNumber);
             //System.out.println("rand num: "+randomNumber);
             Entity d = new Entity(Entity.DISCIPLE, 1.0, 1.0, 1.0, 1, 1, 1, 1, (Game.GAME_SIZE-(wah+150))+randomNumber);
-            d.setTarget(Building.getByIndex(0));
+            d.setTarget(Building.getByIndex(Enshrine.fightArea));
             population.add(d);
         }
         //TEST spawn opponent
         Entity d = new Entity(Entity.ENEMY, 1.0, 1.0, 1.0, 1, 1, 1, 1, 1000);
-        d.setTarget(Building.getByIndex(1));
+        d.setTarget(Building.getByIndex(Enshrine.campFir));
         population.add(d);
         
         games.add(this);

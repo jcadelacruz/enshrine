@@ -19,7 +19,7 @@ public class Entity {
     public final static String ENEMY="HANNAH", DISCIPLE="LIKE_AND_SUBSCRIBE", USER="ITS_MAAM_ACTUALLY";
     public final static int WOOD=0, IRON=1, FOOD=2;
     public final static int MAXSPEED = 4, LCM_OF_MAXSPEED = 12;
-    public final static int STEPSIZE = 60;
+    public final static int STEPSIZE = 15;
     
     //type
     protected String type;//Type distinguishes allies from foes; allies can't damage each other
@@ -209,13 +209,14 @@ public class Entity {
         if(incapacitated){
             //change image state
             //reset target
-            setTarget(Building.getByIndex(1));
+            setTarget(Building.getByIndex(Enshrine.campFir));
         }
         if(!incapacitated){
             //change image state
             //reset target
-            if(buildingAttemptingToReach==Building.getByIndex(1)){
-                setTarget(Building.getByIndex(0));
+            if(buildingAttemptingToReach==Building.getByIndex(Enshrine.campFir)){
+                setTarget(Building.getByIndex(Enshrine.fightArea));
+                //change place
             }
         }
     }
