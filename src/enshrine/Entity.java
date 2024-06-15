@@ -9,7 +9,6 @@ import exceptions.OutOfGameScreenBoundsException;
 import exceptions.OutOfResourceCapacityBoundsException;
 import exceptions.NotAffordableException;
 import java.util.ArrayList;
-import javafx.scene.image.ImageView;
 
 /**
  * Entity represents the moving NPCs. Everything revolves around them since they're the only ones that can move and interact with anything (besides sacrificing which the player can do on their own)
@@ -37,6 +36,7 @@ public class Entity {
     private Building buildingAttemptingToReach = null;
     private boolean insideBuilding = false, goingRight = true;
     private EntityDisplay displayCharacter = null;
+    private EntityTaskDisplay taskDisplay = null;
         //
     protected int actionSpd;//They can do building actions, hence actionSpd
         protected int iq;//They can craft, hence iq
@@ -99,6 +99,7 @@ public class Entity {
         //display
     public EntityDisplay getDisplayCharacter(){ return displayCharacter;}
     public String getImageFileName(){ return "/imgs/not.png";}//TEMPORARY/ might not be necessary
+    public EntityTaskDisplay getTaskDisplay(){ return taskDisplay;}
         //inventory
             //inv-items
     public Item getItemAttemptingToCraft(){ return itemAttemptingToCraft;}

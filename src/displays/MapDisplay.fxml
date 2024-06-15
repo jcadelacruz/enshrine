@@ -15,6 +15,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="1200.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.GameDisplayController">
@@ -87,6 +88,27 @@
                               </VBox>
                               <VBox fx:id="taskListCol2" maxWidth="-Infinity" minWidth="-Infinity" prefHeight="0.0" prefWidth="175.0">
                                  <children>
+                                    <HBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="175.0">
+                                       <children>
+                                          <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="50.0" prefWidth="25.0" text="&lt;" />
+                                          <ImageView fitHeight="50.0" fitWidth="50.0" pickOnBounds="true" preserveRatio="true">
+                                             <image>
+                                                <Image url="@../imgs/not.png" />
+                                             </image>
+                                          </ImageView>
+                                          <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="50.0" prefWidth="75.0">
+                                             <children>
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="NAME">
+                                                   <font>
+                                                      <Font size="10.0" />
+                                                   </font></Text>
+                                                <ProgressBar maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="10.0" prefWidth="75.0" progress="0.0" />
+                                                <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Text" />
+                                             </children>
+                                          </VBox>
+                                          <Button maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" prefHeight="50.0" prefWidth="25.0" text="&gt;" />
+                                       </children>
+                                    </HBox>
                                     <AnchorPane prefHeight="55.0" prefWidth="175.0">
                                        <children>
                                           <Button mnemonicParsing="false" prefHeight="55.0" prefWidth="175.0" text="Button" />

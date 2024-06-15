@@ -8,6 +8,7 @@ import enshrine.BuildingDisplay;
 import enshrine.Building;
 import enshrine.Entity;
 import enshrine.EntityDisplay;
+import enshrine.EntityTaskDisplay;
 import enshrine.Game;
 import enshrine.MyTimerTask;
 import java.net.URL;
@@ -19,8 +20,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -65,28 +64,6 @@ public class GameDisplayController implements Initializable {
     @FXML private void togglePause(ActionEvent e){
         paused = !paused;
     }
-    public void updatePlayArea(){
-        //population
-        for(Entity e : loadedGame.getPopulation()){
-            if(e.getDisplayCharacter()==null&&!e.getInsideBuilding()){
-                //make entityDisplay - set in entity
-                EntityDisplay iv = new EntityDisplay(e);
-                e.setDisplayCharacter(iv);
-                //display in screen
-                playAreaAnchorPane.getChildren().add(e.getDisplayCharacter());
-            }
-            if(e.getDisplayCharacter()!=null){
-                EntityDisplay iv = e.getDisplayCharacter();
-                //change visibility of character
-                if(e.getInsideBuilding()){ iv.setVisible(false);}
-                else iv.setVisible(true);
-                //set location of character display
-                iv.setLayoutX(e.getPos());
-                iv.setLayoutY(Game.DEFAULT_Y_POS);
-                //change image state here
-            }
-        }
-    }
     public void update(){
         try{for(Entity e : loadedGame.getPopulation()){
             e.update(turn);
@@ -107,6 +84,45 @@ public class GameDisplayController implements Initializable {
             //System.out.println("Error");//i have no idea how to fix this exception from not occurring
         }
         updatePlayArea();
+    }
+    public void updatePlayArea(){
+        //population
+        displayEntities(loadedGame.getPopulation());
+    }
+    public void displayEntities(ArrayList<Entity> e){
+        for(Entity c:e){
+            displayEntity(c);
+        }
+    }
+    public void addEntityTaskList(Entity e){ addEntityTaskList(e, e.getTaskDisplay().getColNum());}
+    public void addEntityTaskList(Entity e, int colNum){
+        EntityTaskDisplay t = e.getTaskDisplay();
+        VBox v = taskListCols.get(colNum);
+        v.getChildren().add(t);
+    }
+    public void removeEntityTaskList(Entity e, int colNum){
+        EntityTaskDisplay t = e.getTaskDisplay();
+        VBox v = taskListCols.get(colNum);
+        v.getChildren().remove(t);
+    }
+    public void displayEntity(Entity e){
+        if(e.getDisplayCharacter()==null&&!e.getInsideBuilding()){
+            //make entityDisplay - set in entity
+            EntityDisplay iv = new EntityDisplay(e);
+            e.setDisplayCharacter(iv);
+            //display in screen
+            playAreaAnchorPane.getChildren().add(e.getDisplayCharacter());
+        }
+        if(e.getDisplayCharacter()!=null){
+            EntityDisplay iv = e.getDisplayCharacter();
+            //change visibility of character
+            if(e.getInsideBuilding()){ iv.setVisible(false);}
+            else iv.setVisible(true);
+            //set location of character display
+            iv.setLayoutX(e.getPos());
+            iv.setLayoutY(Game.DEFAULT_Y_POS);
+            //change image state here
+        }
     }
     public void displayBuildings(ArrayList<Building> b){
         for(Building c:b){displayBuildings(c);}
@@ -136,6 +152,9 @@ public class GameDisplayController implements Initializable {
         //display all
         displayBuildings(buildingsToInitialize);
     }
+    private void initializeEntityTaskDisplayRelation(){
+        EntityTaskDisplay.setGDC(this);
+    }
     public void initializeTimer(){
         Timer timer = new Timer("delay", true);
         timer.scheduleAtFixedRate(new MyTimerTask(), 100, 1000/TICKRATE);
@@ -160,6 +179,7 @@ public class GameDisplayController implements Initializable {
         initializeTaskList();
         initializeTimer();
         initializeBuildings();
+        initializeEntityTaskDisplayRelation();
     }
     /**
      * Initializes the controller class.
