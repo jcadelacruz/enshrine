@@ -37,7 +37,7 @@ public class Enshrine extends Application {
         Building siloI = new StorageBuilding("Iron", 1910, 100, 1);
         Building siloF = new StorageBuilding("Food", 2020, 100, 2);
         
-        double str[] = {0.0,0.0,0.05,0.0,0.0,0.0,0.0,0.0}, iq[] = {0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.05};
+        double str[] = {0.0,0.0,0.05,0.0,0.0,0.0,0.0,0.0}, iq[] = {0.0,0.0,0.0,0.0,0.0,0.0,0.0,1};
         Building cubao = new TrainingBuilding("Train Station", str, 2140, 150, 0);
         Building shb2f = new TrainingBuilding("Library", iq, 2300, 140, 0);
         double res[] = {1.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0};

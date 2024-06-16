@@ -27,4 +27,8 @@ public class DestinationBuilding extends Building {
     public String getEfficiency() {
         return "This is the "+this.getName();
     }
+    @Override
+    public boolean collidesWith(Entity e){
+        return false;
+    }
 }

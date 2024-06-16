@@ -145,11 +145,11 @@ public class EntityTaskDisplay extends HBox{
         switch(colNum){
             case 0://fight
                 des="Fighting";
-                des+=" - str: "+entity.getStats()[2];
+                des+=" - str: "+((double)(Math.round(entity.getStats()[2]*100))/100);
                 break;
             case 1://train
-                if(train==0) des= "Str: "+entity.getStats()[2];
-                if(train==1) des= "IQ: "+entity.getStats()[7];
+                if(train==0) des= "Str: "+((double)(Math.round(entity.getStats()[2]*100))/100);
+                if(train==1) des= "IQ: "+(int)entity.getStats()[7];
                 break;
             case 2://craft
                 des="Crafting ";
