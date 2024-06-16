@@ -167,6 +167,8 @@ public class Entity {
             }
             displayCharacter.update(this);
         }
+        try{ taskDisplay.update();}
+        catch(NullPointerException e){}
     }
         //stats
     public void addStat(double[] d){
@@ -234,6 +236,9 @@ public class Entity {
         //reset fields
         targetOpponent = null;
         insideBuilding = false;
+        //update displays
+        try{ taskDisplay.update();}
+        catch(NullPointerException e){}
     }
     public void move() throws OutOfGameScreenBoundsException{
         //determine direction

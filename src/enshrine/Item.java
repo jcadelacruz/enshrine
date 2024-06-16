@@ -9,8 +9,9 @@ package enshrine;
  * @author dc_ca
  */
 public class Item {
-    public int[] getRequirements(){
-        int[] res = {0,0,0};
-        return res;
-    }
+    private String name;
+    private int requirements[] = new int[3];
+    
+    public String getName(){ return name;}
+    public int[] getRequirements(){ return requirements;}
 }

@@ -8,6 +8,7 @@ import controllers.EntityMenuDisplayController;
 import controllers.GameDisplayController;
 import java.io.IOException;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -59,8 +60,7 @@ public class EntityTaskDisplay extends HBox{
         this.setPrefHeight(HEIGHT);
         this.setPrefWidth(WIDTH);
         //functions
-        this.setOnMouseDragEntered(event -> {addLightEffect();});
-        this.setOnMouseDragExited(event -> {removeLightEffect();});
+        this.setOnMouseExited(event -> {removeLightEffect(entity.getDisplayCharacter());});
 
         //buttons
         leftButton = new Button("<");
@@ -91,6 +91,8 @@ public class EntityTaskDisplay extends HBox{
         img.setImage(new Image(getClass().getResourceAsStream(e.getImageFileName())));
         //function
         img.setOnMouseClicked(event->{ openEntityDisplay();});
+        img.setOnMouseEntered(event -> {addLightEffects(img);});
+        img.setOnMouseExited(event -> {removeLightEffect(img);});
 
         //innerVBox
         innerVBox = new VBox();
@@ -118,9 +120,15 @@ public class EntityTaskDisplay extends HBox{
         innerVBox.getChildren().addAll(nameText, healthBar, descriptionText);
         //function
         innerVBox.setOnMouseClicked(event -> {toggleActivity();});
+        innerVBox.setOnMouseEntered(event -> {
+            if(colNum==GameDisplayController.fightCol) addLightEffect(entity.getDisplayCharacter());
+            else addLightEffects(innerVBox);
+        });
+        innerVBox.setOnMouseExited(event -> {removeLightEffect(innerVBox);});
 
         this.getChildren().addAll(leftButton, img, innerVBox, rightButton);
         checkMoveButtonLimits();
+        update();
     }
     
     //getters
@@ -129,6 +137,35 @@ public class EntityTaskDisplay extends HBox{
     public static void setGDC(GameDisplayController t){ currentGDC = t;}
 
     //methods
+    public void update(){
+        double s[] = entity.getStats();
+        nameText.setText(entity.getName());
+        healthBar.setProgress(s[0]/s[1]);
+        String des="";
+        switch(colNum){
+            case 0://fight
+                des="Fighting";
+                des+=" - str: "+entity.getStats()[2];
+                break;
+            case 1://train
+                if(train==0) des= "Str: "+entity.getStats()[2];
+                if(train==1) des= "IQ: "+entity.getStats()[7];
+                break;
+            case 2://craft
+                des="Crafting ";
+                try{ des+=entity.getItemAttemptingToCraft().getName();}
+                catch(NullPointerException e){}
+                break;
+            case 3://gather
+		//des="Gathering ";
+                if(gather==0) des+= "Wood: "+entity.getMaterialCnts()[gather];
+                if(gather==1) des+= "Iron: "+entity.getMaterialCnts()[gather];
+                if(gather==2) des+= "Food: "+entity.getMaterialCnts()[gather];
+                break;
+            default:
+        }
+        descriptionText.setText(des);
+    }
     private void moveEntityTaskDisplay(boolean goingRight){
         int change = -1;
         if(goingRight) change = 1;
@@ -191,7 +228,7 @@ public class EntityTaskDisplay extends HBox{
         }
     }
     private void openCraftMenu(){
-        
+        System.out.println("open craft menu");
     }
     private void openEntityDisplay(){
         //close all
@@ -219,14 +256,18 @@ public class EntityTaskDisplay extends HBox{
     }
 
         //aesthetic
-    private void addLightEffect() {
-        ColorAdjust colorAdjust = new ColorAdjust();
-        colorAdjust.setBrightness(1.2); // Adjust the brightness
-
-        this.setEffect(colorAdjust);
+    private void addLightEffects(Node n) {
+        addLightEffect(n);
+        addLightEffect(entity.getDisplayCharacter());
     }
-    private void removeLightEffect() {
-        this.setEffect(null);
+    private void addLightEffect(Node n) {
+        ColorAdjust colorAdjust = new ColorAdjust();
+        colorAdjust.setBrightness(0.7); // Adjust the brightness
+        
+        n.setEffect(colorAdjust);
+    }
+    private void removeLightEffect(Node n) {
+        n.setEffect(null);
     }
     
 }
