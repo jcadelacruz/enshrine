@@ -184,6 +184,7 @@ public class GameDisplayController implements Initializable {
         Stage currentStage = (Stage) currentScene.getWindow();
         currentStage.setOnCloseRequest(event -> {
             BuildingMenuDisplayController.closeAll();
+            EntityMenuDisplayController.closeAll();
         });
     }
     private void initializeAll(){

@@ -158,7 +158,7 @@ public class Entity {
                     if(canThisBePerformed(turn, moveSpd)){
                         try{ move();}
                         catch (OutOfGameScreenBoundsException ex) {System.out.println("Error in Entity class; update()");}
-                        if(buildingAttemptingToReach.collidesWith(this)){ insideBuilding = true;}
+                        if(buildingAttemptingToReach.collidesWith(this)&&buildingAttemptingToReach.getBuilt()){ insideBuilding = true;}
                     }
                 }
                 else{

@@ -27,6 +27,10 @@ public class EntityDisplay extends VBox {
             this.setPrefHeight(STANDARD_HEIGHT);
             this.setStyle("-fx-background-color: lightblue;"); // Set background color
             this.setAlignment(Pos.BOTTOM_CENTER);
+            //functions
+            this.setOnMousePressed(event ->{e.getTaskDisplay().openEntityDisplay();});
+            this.setOnMouseEntered(event ->{EntityTaskDisplay.addLightEffects(e);});
+            this.setOnMouseExited(event ->{EntityTaskDisplay.removeLightEffects(e);});
         //image
             Image image;
             try{ image = new Image(e.getImageFileName());}

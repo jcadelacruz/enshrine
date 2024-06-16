@@ -17,7 +17,7 @@ public abstract class Building {
     
     private String name, type;
     protected double[] effects = new double[8];//im not sure if 8 is the max possible amt
-    protected boolean built = false;
+    protected boolean built = true;
     protected int pos, width;//see Entity class for details
     private int level;
     private BuildingDisplay display;

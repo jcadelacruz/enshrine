@@ -229,8 +229,8 @@ public class EntityTaskDisplay extends HBox{
     }
     private void openCraftMenu(){
         System.out.println("open craft menu");
-    }
-    private void openEntityDisplay(){
+    } 
+    public void openEntityDisplay(){
         //close all
         EntityMenuDisplayController.closeAll();
         //open new
@@ -240,7 +240,7 @@ public class EntityTaskDisplay extends HBox{
             Scene currentScene = this.getScene();
             Stage newStage = new Stage();
             //get new display
-            loader = new FXMLLoader(getClass().getResource("/displays/BuildingMenuDisplay.fxml"));
+            loader = new FXMLLoader(getClass().getResource("/displays/EntityMenuDisplay.fxml"));
             Parent root = loader.load();
             Scene scene = new Scene(root);
             //show display
@@ -256,6 +256,10 @@ public class EntityTaskDisplay extends HBox{
     }
 
         //aesthetic
+    public static void addLightEffects(Entity e){
+        EntityTaskDisplay t = e.getTaskDisplay();
+        t.addLightEffects(t.img);
+    }
     private void addLightEffects(Node n) {
         addLightEffect(n);
         addLightEffect(entity.getDisplayCharacter());
@@ -265,6 +269,11 @@ public class EntityTaskDisplay extends HBox{
         colorAdjust.setBrightness(0.7); // Adjust the brightness
         
         n.setEffect(colorAdjust);
+    }
+    public static void removeLightEffects(Entity e){
+        EntityTaskDisplay t = e.getTaskDisplay();
+        t.removeLightEffect(t.img);
+        t.removeLightEffect(e.getDisplayCharacter());
     }
     private void removeLightEffect(Node n) {
         n.setEffect(null);
