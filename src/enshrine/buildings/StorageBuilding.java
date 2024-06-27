@@ -10,8 +10,6 @@ import enshrine.Entity;
 import enshrine.Game;
 import exceptions.NotAffordableException;
 import exceptions.OutOfResourceCapacityBoundsException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *

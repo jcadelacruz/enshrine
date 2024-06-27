@@ -28,7 +28,8 @@ public class Enshrine extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         Building fightingArea = new DestinationBuilding("Fighting Area", 500, 250);
-        double wood[] = {1.0,0,0}, iron[]={0,1.0,0}, food[]={0,1.0,0};
+        
+        double wood[] = {1.0,0,0}, iron[]={0,1.0,0}, food[]={0,0,1.0};
         Building forest = new GatheringBuilding("Forestry", wood, 1200, 200, 0);
         Building weBackInThe = new GatheringBuilding("Mines", iron, 1430, 150, 1);
         Building coop = new GatheringBuilding("Chiken", food, 1600, 175, 2);

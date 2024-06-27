@@ -19,7 +19,7 @@ public class Entity {
     public final static String ENEMY="HANNAH", DISCIPLE="SLAVE", USER="ITS_MAAM_ACTUALLY";
     public final static int WOOD=0, IRON=1, FOOD=2;
     public final static int MAXSPEED = 4, LCM_OF_MAXSPEED = 12;
-    public final static int STEPSIZE = 15;
+    public final static int STEPSIZE = 4;
     
     //type
     protected String name, type;//Type distinguishes allies from foes; allies can't damage each other
@@ -155,11 +155,11 @@ public class Entity {
                 }}
             else{
                 if(findOpponentOnPath()==null){
-                    if(canThisBePerformed(turn, moveSpd)){
+                    //if(canThisBePerformed(turn, moveSpd)){
                         try{ move();}
                         catch (OutOfGameScreenBoundsException ex) {System.out.println("Error in Entity class; update()");}
                         if(buildingAttemptingToReach.collidesWith(this)&&buildingAttemptingToReach.getBuilt()){ insideBuilding = true;}
-                    }
+                    //}
                 }
                 else{
                     targetOpponent = findOpponentOnPath();
@@ -245,12 +245,12 @@ public class Entity {
         goingRight = (targetPos>pos);
         //move
         if(goingRight){
-            if(pos+STEPSIZE>Game.GAME_SIZE) throw new OutOfGameScreenBoundsException();
-            pos+= STEPSIZE;
+            if(pos+(STEPSIZE/moveSpd)>Game.GAME_SIZE) throw new OutOfGameScreenBoundsException();
+            pos+=STEPSIZE*moveSpd;
         }
         else{
-            if(pos-moveSpd<0) throw new OutOfGameScreenBoundsException();
-            pos-= STEPSIZE;
+            if(pos-(STEPSIZE/moveSpd)<0) throw new OutOfGameScreenBoundsException();
+            pos-=STEPSIZE*moveSpd;
         }
     }
     /*public boolean findOpponentOnPath(){
@@ -270,7 +270,7 @@ public class Entity {
     }*/
     public Entity findOpponentOnPath(){
         //determine direction
-        double add = STEPSIZE;
+        double add = STEPSIZE/moveSpd;
         if(!goingRight){ add = -add;}
         else add+=width;
         

@@ -69,7 +69,7 @@ public class Game{
             }
             taken.add(randomNumber);
             //System.out.println("rand num: "+randomNumber);
-            Entity d = new Entity(Entity.DISCIPLE, 1.0, 1.0, 1.0, 1, 1, 1, 1, (Game.GAME_SIZE-(wah+150))+randomNumber);
+            Entity d = new Entity(Entity.DISCIPLE, 1.0, 1.0, 1.0, j+1, 1, 1, 1, (Game.GAME_SIZE-(wah+150))+randomNumber);
             d.setTarget(Building.getByIndex(Enshrine.fightArea));
             population.add(d);
         }

@@ -41,7 +41,7 @@ public class GameDisplayController implements Initializable {
     private int turn = 0;
     
     private static ArrayList<GameDisplayController> allMDCs = new ArrayList<>();
-    public static int TICKRATE = 48, TURN_RESET_AT = TICKRATE*2, MOVEMODIFIER = 2, ACTIONMODIFIER;
+    public static int TICKRATE = 24, TURN_RESET_AT = TICKRATE*2, MOVEMODIFIER = 2, ACTIONMODIFIER;
     public static int fightCol=0, trainCol=1, craftCol=2, gatherCol=3;
 
     public void setGame(enshrine.Game g){
